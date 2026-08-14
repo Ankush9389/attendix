@@ -31,7 +31,7 @@
 
     <style>
         /* ============================================================
-                   CSS VARIABLES & RESET
+                   CSS VARIABLES & RESET - COMPLETE
                    ============================================================ */
         :root {
             --primary: #2563EB;
@@ -123,9 +123,7 @@
             border-radius: 10px;
         }
 
-        /* ============================================================
-                   LOADER
-                   ============================================================ */
+        /* LOADER */
         .loader-overlay {
             position: fixed;
             inset: 0;
@@ -154,9 +152,7 @@
             }
         }
 
-        /* ============================================================
-                   TOAST
-                   ============================================================ */
+        /* TOAST */
         .toast-container {
             position: fixed;
             top: 16px;
@@ -233,9 +229,7 @@
             }
         }
 
-        /* ============================================================
-                   LOGIN PAGE
-                   ============================================================ */
+        /* LOGIN PAGE */
         #loginPage {
             min-height: 100vh;
             display: flex;
@@ -447,7 +441,6 @@
             transform: none;
         }
 
-        /* Google Button */
         .btn-google {
             display: inline-flex;
             align-items: center;
@@ -513,9 +506,7 @@
             cursor: pointer;
         }
 
-        /* ============================================================
-                   APP LAYOUT
-                   ============================================================ */
+        /* APP LAYOUT */
         #app {
             display: none;
             flex-direction: column;
@@ -525,9 +516,7 @@
             display: flex;
         }
 
-        /* ============================================================
-                   HEADER
-                   ============================================================ */
+        /* HEADER */
         .app-header {
             height: var(--header-height);
             padding: 0 16px;
@@ -598,9 +587,7 @@
             font-size: 0.8rem;
         }
 
-        /* ============================================================
-                   PAGE CONTENT
-                   ============================================================ */
+        /* PAGE CONTENT */
         .page-content {
             flex: 1;
             padding: 16px 16px 8px;
@@ -626,9 +613,7 @@
             display: block;
         }
 
-        /* ============================================================
-                   BOTTOM NAVIGATION - VISIBLE ON ALL DEVICES
-                   ============================================================ */
+        /* BOTTOM NAV - VISIBLE ON ALL DEVICES */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -702,9 +687,7 @@
             transform: scale(0.92);
         }
 
-        /* ============================================================
-                   DASHBOARD - STATS
-                   ============================================================ */
+        /* STATS */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -765,9 +748,7 @@
             font-size: 0.6rem;
         }
 
-        /* ============================================================
-                   CHARTS
-                   ============================================================ */
+        /* CHARTS */
         .charts-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -802,9 +783,7 @@
             max-width: 100%;
         }
 
-        /* ============================================================
-                   CALENDAR WIDGET
-                   ============================================================ */
+        /* CALENDAR */
         .widget-card {
             background: var(--card);
             border-radius: var(--radius);
@@ -878,9 +857,7 @@
             opacity: 0.25;
         }
 
-        /* ============================================================
-                   STUDENTS PAGE
-                   ============================================================ */
+        /* STUDENTS */
         .page-toolbar {
             display: flex;
             flex-wrap: wrap;
@@ -1001,7 +978,6 @@
             font-size: 0.7rem;
         }
 
-        /* Table */
         .table-wrap {
             overflow-x: auto;
             background: var(--card);
@@ -1082,9 +1058,7 @@
             font-size: 0.85rem;
         }
 
-        /* ============================================================
-                   ATTENDANCE
-                   ============================================================ */
+        /* ATTENDANCE */
         .attendance-controls {
             display: flex;
             flex-wrap: wrap;
@@ -1223,9 +1197,7 @@
             border-color: var(--warning);
         }
 
-        /* ============================================================
-                   REPORTS
-                   ============================================================ */
+        /* REPORTS */
         .report-filters {
             display: flex;
             flex-wrap: wrap;
@@ -1311,9 +1283,7 @@
             color: var(--primary);
         }
 
-        /* ============================================================
-                   PROFILE / SETTINGS
-                   ============================================================ */
+        /* PROFILE */
         .profile-header {
             display: flex;
             align-items: center;
@@ -1382,6 +1352,7 @@
             letter-spacing: 0.3px;
         }
 
+        /* SETTINGS */
         .settings-group {
             background: var(--card);
             border-radius: var(--radius);
@@ -1472,9 +1443,7 @@
             border-color: var(--danger);
         }
 
-        /* ============================================================
-                   MODALS
-                   ============================================================ */
+        /* MODALS */
         .modal-overlay {
             position: fixed;
             inset: 0;
@@ -1624,9 +1593,7 @@
             margin-top: 16px;
         }
 
-        /* ============================================================
-                   RESPONSIVE
-                   ============================================================ */
+        /* RESPONSIVE */
         @media (min-width: 768px) {
             .page-content {
                 padding: 24px 32px 16px;
@@ -1657,7 +1624,6 @@
             .profile-header {
                 padding: 20px 28px;
             }
-            /* Bottom nav visible on all devices */
             .bottom-nav {
                 display: flex !important;
             }
@@ -1769,7 +1735,6 @@
             table td {
                 padding: 6px 10px;
             }
-            /* Bottom nav visible on mobile too */
             .bottom-nav {
                 display: flex !important;
             }
@@ -1837,12 +1802,12 @@
 </head>
 <body>
 
-    <!-- ===== LOADER ===== -->
+    <!-- LOADER -->
     <div class="loader-overlay" id="loader">
         <div class="loader"></div>
     </div>
 
-    <!-- ===== TOAST ===== -->
+    <!-- TOAST -->
     <div class="toast-container" id="toastContainer"></div>
 
     <!-- ============================================================
@@ -1918,7 +1883,7 @@
         <!-- PAGE CONTENT -->
         <div class="page-content" id="pageContent">
 
-            <!-- ===== DASHBOARD ===== -->
+            <!-- DASHBOARD -->
             <section class="page-section active" id="page-dashboard">
                 <div class="stats-grid" id="dashStats">
                     <div class="stat-card">
@@ -1970,7 +1935,7 @@
                 </div>
             </section>
 
-            <!-- ===== STUDENTS ===== -->
+            <!-- STUDENTS -->
             <section class="page-section" id="page-students">
                 <div class="page-toolbar">
                     <div class="search-box">
@@ -2002,7 +1967,7 @@
                 </div>
             </section>
 
-            <!-- ===== ATTENDANCE ===== -->
+            <!-- ATTENDANCE -->
             <section class="page-section" id="page-attendance">
                 <div class="attendance-controls">
                     <div class="form-group">
@@ -2038,7 +2003,7 @@
                 </div>
             </section>
 
-            <!-- ===== REPORTS ===== -->
+            <!-- REPORTS -->
             <section class="page-section" id="page-reports">
                 <div class="report-filters">
                     <div class="form-group">
@@ -2079,7 +2044,7 @@
                 </div>
             </section>
 
-            <!-- ===== PROFILE ===== -->
+            <!-- PROFILE -->
             <section class="page-section" id="page-profile">
                 <div class="profile-header">
                     <div class="profile-avatar" id="profileAvatar">T</div>
@@ -2125,7 +2090,7 @@
 
         </div>
 
-        <!-- BOTTOM NAV - VISIBLE ON ALL DEVICES -->
+        <!-- BOTTOM NAV -->
         <nav class="bottom-nav" id="bottomNav">
             <button class="nav-item active" data-page="dashboard">
                 <i class="fas fa-home"></i>
@@ -2247,8 +2212,7 @@
             deleteDoc,
             doc,
             onSnapshot,
-            writeBatch,
-            orderBy
+            writeBatch
         } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-analytics.js";
 
@@ -2276,8 +2240,10 @@
                         <div style="font-size:3rem;">⚠️</div>
                         <h2>Firebase Connection Error</h2>
                         <p style="color:#666;max-width:400px;">${err.message || 'Unknown error'}</p>
+                        <p style="font-size:0.8rem;color:#999;">Please check your internet connection and Firebase config.</p>
                     </div>
                 `;
+            // Still try to continue
         }
 
         const auth = getAuth(app);
@@ -2419,7 +2385,7 @@
         // ============================================================
         // TOAST
         // ============================================================
-        function showToast(message, type = 'info', duration = 3000) {
+        function showToast(message, type = 'info', duration = 3500) {
             const icons = { info: 'fa-circle-info', success: 'fa-check-circle', error: 'fa-circle-exclamation',
                 warning: 'fa-triangle-exclamation' };
             const colors = { info: 'var(--primary)', success: 'var(--success)', error: 'var(--danger)',
@@ -2442,6 +2408,7 @@
         // LOADER
         // ============================================================
         function hideLoader() { setTimeout(() => loader.classList.add('hide'), 300); }
+        function showLoader() { loader.classList.remove('hide'); }
 
         // ============================================================
         // THEME
@@ -2552,6 +2519,7 @@
             const email = loginEmail.value.trim();
             const password = loginPassword.value.trim();
             if (!email || !password) { showToast('Please fill all fields.', 'error'); return; }
+            showLoader();
             try {
                 if (isLoginMode) {
                     await signInWithEmailAndPassword(auth, email, password);
@@ -2562,26 +2530,34 @@
                 }
             } catch (err) {
                 showToast(err.message, 'error');
+                hideLoader();
             }
         });
 
         // ============================================================
-        // GOOGLE LOGIN
+        // GOOGLE LOGIN - FIXED with better error handling
         // ============================================================
         googleLoginBtn.addEventListener('click', async () => {
             try {
+                showToast('Opening Google login...', 'info', 2000);
                 const result = await signInWithPopup(auth, googleProvider);
                 const user = result.user;
-                // If first time, set a default display name
                 if (!user.displayName) {
-                    await updateProfile(user, { displayName: 'Teacher' });
+                    await updateProfile(user, { displayName: user.email?.split('@')[0] || 'Teacher' });
                 }
-                showToast('Signed in with Google!', 'success');
+                showToast('Signed in with Google! ✅', 'success');
             } catch (err) {
+                console.error('Google login error:', err);
                 if (err.code === 'auth/popup-closed-by-user') {
-                    showToast('Login cancelled.', 'warning');
+                    showToast('Login cancelled. Please try again.', 'warning');
+                } else if (err.code === 'auth/operation-not-allowed') {
+                    showToast('⚠️ Google sign-in is not enabled in Firebase Console. Please enable it in Authentication → Sign-in methods.', 'error', 6000);
+                } else if (err.code === 'auth/unauthorized-domain') {
+                    showToast('⚠️ This domain is not authorized. Add it in Firebase Console → Authentication → Authorized domains.', 'error', 6000);
+                } else if (err.code === 'auth/popup-blocked') {
+                    showToast('⚠️ Popup blocked! Please allow popups for this site.', 'error', 5000);
                 } else {
-                    showToast(err.message, 'error');
+                    showToast('Google login error: ' + err.message, 'error', 5000);
                 }
             }
         });
@@ -2622,7 +2598,7 @@
         });
 
         // ============================================================
-        // FIRESTORE: LOAD DATA (per user)
+        // FIRESTORE: LOAD DATA - FIXED: No orderBy to avoid index requirement
         // ============================================================
         async function loadAllData() {
             if (!uid) {
@@ -2630,12 +2606,14 @@
                 return;
             }
 
-            // Students
+            // Students - NO orderBy to avoid composite index requirement
             if (studentsListener) studentsListener();
-            const qStudents = query(collection(db, 'students'), where('uid', '==', uid), orderBy('name'));
+            const qStudents = query(collection(db, 'students'), where('uid', '==', uid));
             studentsListener = onSnapshot(qStudents, (snapshot) => {
                 students = [];
                 snapshot.forEach(doc => { students.push({ id: doc.id, ...doc.data() }); });
+                // Sort client-side instead
+                students.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
                 if (currentPage === 'students') renderStudentTable();
                 if (currentPage === 'dashboard') refreshDashboard();
                 if (currentPage === 'attendance') loadAttendanceStudents();
@@ -2646,20 +2624,28 @@
             }, (err) => {
                 console.error('Students error:', err);
                 showToast('Error loading students: ' + err.message, 'error');
+                // Still show empty state
+                students = [];
+                renderStudentTable();
+                refreshDashboard();
             });
 
-            // Attendance
+            // Attendance - NO orderBy to avoid composite index requirement
             if (attendanceListener) attendanceListener();
-            const qAtt = query(collection(db, 'attendance'), where('uid', '==', uid), orderBy('date', 'desc'));
+            const qAtt = query(collection(db, 'attendance'), where('uid', '==', uid));
             attendanceListener = onSnapshot(qAtt, (snapshot) => {
                 attendance = [];
                 snapshot.forEach(doc => { attendance.push({ id: doc.id, ...doc.data() }); });
+                // Sort client-side by date descending
+                attendance.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
                 if (currentPage === 'dashboard') refreshDashboard();
                 if (currentPage === 'attendance') loadAttendanceStudents();
                 if (currentPage === 'profile') refreshProfile();
             }, (err) => {
                 console.error('Attendance error:', err);
                 showToast('Error loading attendance: ' + err.message, 'error');
+                attendance = [];
+                refreshDashboard();
             });
         }
 
@@ -2945,7 +2931,6 @@
         studentForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            // Make sure we have a valid UID
             if (!uid) {
                 showToast('You must be logged in to add students.', 'error');
                 return;
@@ -2976,7 +2961,6 @@
                     await updateDoc(docRef, data);
                     showToast('Student updated!', 'success');
                 } else {
-                    // Check if ID already exists for this user
                     const existing = students.find(s => s.id === data.id);
                     if (existing) {
                         showToast('Student ID already exists!', 'error');
@@ -2989,7 +2973,6 @@
                     showToast('Student added successfully!', 'success');
                 }
                 closeStudentModalFn();
-                // Data will refresh via listener
             } catch (err) {
                 console.error('Error saving student:', err);
                 showToast('Error: ' + err.message, 'error');
@@ -3430,7 +3413,7 @@
 
         if (!attDate.value) { attDate.value = new Date().toISOString().split('T')[0]; }
 
-        console.log('🚀 Attendix v2.0 — Firebase ready with Google Login & Persistence');
+        console.log('🚀 Attendix v2.0 — Firebase ready with Google Login & Fixed Index Issue');
 
         // Fallback load if auth doesn't trigger quickly
         setTimeout(() => {
@@ -3438,6 +3421,33 @@
                 hideLoader();
             }
         }, 3000);
+
+        // Show helpful message about Firebase setup
+        setTimeout(() => {
+            if (!currentUser) {
+                console.log('💡 Firebase Setup Checklist:');
+                console.log('1. Enable Email/Password in Authentication → Sign-in methods');
+                console.log('2. Enable Google in Authentication → Sign-in methods');
+                console.log('3. Create Firestore Database in test mode');
+                console.log('4. Add your domain to Authorized domains');
+                console.log('5. No composite indexes needed (queries now sort client-side)');
+            }
+        }, 1000);
+    </script>
+
+    <!-- ============================================================
+    FIREBASE SETUP INSTRUCTIONS - Displayed in console
+    ============================================================ -->
+    <script>
+        // Show setup instructions in console
+        console.log('%c🔥 FIREBASE SETUP CHECKLIST', 'font-size:16px;font-weight:bold;');
+        console.log('%c1. Enable Email/Password → Authentication → Sign-in methods', 'font-size:13px;');
+        console.log('%c2. Enable Google → Authentication → Sign-in methods', 'font-size:13px;');
+        console.log('%c3. Create Firestore Database (test mode is fine)', 'font-size:13px;');
+        console.log('%c4. Add your domain to Authorized domains (for Google login)', 'font-size:13px;');
+        console.log('%c5. No composite indexes needed - queries sort client-side ✅', 'font-size:13px;color:#22C55E;');
+        console.log('%c📌 If Google login fails, check: Authorized domains & Google provider enabled.',
+            'font-size:13px;color:#F59E0B;');
     </script>
 </body>
 </html>
