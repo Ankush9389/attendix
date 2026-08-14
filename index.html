@@ -2013,6 +2013,7 @@
                             <option value="student">Individual Student</option>
                         </select>
                     </div>
+                    <!-- Class & Section for both types, but hidden for student? We'll show conditionally -->
                     <div class="form-group" id="reportClassGroup">
                         <label>Class</label>
                         <select id="reportClass"><option value="">All</option></select>
@@ -2021,8 +2022,13 @@
                         <label>Section</label>
                         <select id="reportSection"><option value="">All</option></select>
                     </div>
+                    <!-- Student specific filters -->
                     <div class="form-group" id="reportStudentGroup" style="display:none;">
-                        <label>Student</label>
+                        <label>Search Student</label>
+                        <input type="text" id="studentSearchInput" placeholder="Type name or ID..." />
+                    </div>
+                    <div class="form-group" id="reportStudentSelectGroup" style="display:none;">
+                        <label>Select Student</label>
                         <select id="reportStudent"><option value="">Select</option></select>
                     </div>
                     <div class="form-group" style="min-width:100px;">
@@ -2243,7 +2249,6 @@
                         <p style="font-size:0.8rem;color:#999;">Please check your internet connection and Firebase config.</p>
                     </div>
                 `;
-            // Still try to continue
         }
 
         const auth = getAuth(app);
@@ -2343,9 +2348,11 @@
         const reportClass = $('reportClass');
         const reportSection = $('reportSection');
         const reportStudent = $('reportStudent');
+        const studentSearchInput = $('studentSearchInput');
         const reportClassGroup = $('reportClassGroup');
         const reportSectionGroup = $('reportSectionGroup');
         const reportStudentGroup = $('reportStudentGroup');
+        const reportStudentSelectGroup = $('reportStudentSelectGroup');
         const generateReportBtn = $('generateReportBtn');
         const reportOutput = $('reportOutput');
         const reportActions = $('reportActions');
@@ -2408,7 +2415,6 @@
         // LOADER
         // ============================================================
         function hideLoader() { setTimeout(() => loader.classList.add('hide'), 300); }
-        function showLoader() { loader.classList.remove('hide'); }
 
         // ============================================================
         // THEME
@@ -2519,7 +2525,6 @@
             const email = loginEmail.value.trim();
             const password = loginPassword.value.trim();
             if (!email || !password) { showToast('Please fill all fields.', 'error'); return; }
-            showLoader();
             try {
                 if (isLoginMode) {
                     await signInWithEmailAndPassword(auth, email, password);
@@ -2530,12 +2535,11 @@
                 }
             } catch (err) {
                 showToast(err.message, 'error');
-                hideLoader();
             }
         });
 
         // ============================================================
-        // GOOGLE LOGIN - FIXED with better error handling
+        // GOOGLE LOGIN
         // ============================================================
         googleLoginBtn.addEventListener('click', async () => {
             try {
@@ -2551,9 +2555,11 @@
                 if (err.code === 'auth/popup-closed-by-user') {
                     showToast('Login cancelled. Please try again.', 'warning');
                 } else if (err.code === 'auth/operation-not-allowed') {
-                    showToast('⚠️ Google sign-in is not enabled in Firebase Console. Please enable it in Authentication → Sign-in methods.', 'error', 6000);
+                    showToast('⚠️ Google sign-in is not enabled in Firebase Console. Please enable it in Authentication → Sign-in methods.',
+                        'error', 6000);
                 } else if (err.code === 'auth/unauthorized-domain') {
-                    showToast('⚠️ This domain is not authorized. Add it in Firebase Console → Authentication → Authorized domains.', 'error', 6000);
+                    showToast('⚠️ This domain is not authorized. Add it in Firebase Console → Authentication → Authorized domains.',
+                        'error', 6000);
                 } else if (err.code === 'auth/popup-blocked') {
                     showToast('⚠️ Popup blocked! Please allow popups for this site.', 'error', 5000);
                 } else {
@@ -2598,7 +2604,7 @@
         });
 
         // ============================================================
-        // FIRESTORE: LOAD DATA - FIXED: No orderBy to avoid index requirement
+        // FIRESTORE: LOAD DATA - FIXED: NO orderBy, client-side sort
         // ============================================================
         async function loadAllData() {
             if (!uid) {
@@ -2606,13 +2612,16 @@
                 return;
             }
 
-            // Students - NO orderBy to avoid composite index requirement
+            // Students
             if (studentsListener) studentsListener();
             const qStudents = query(collection(db, 'students'), where('uid', '==', uid));
             studentsListener = onSnapshot(qStudents, (snapshot) => {
                 students = [];
-                snapshot.forEach(doc => { students.push({ id: doc.id, ...doc.data() }); });
-                // Sort client-side instead
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    students.push({ docId: doc.id, ...data });
+                });
+                // Sort client-side
                 students.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
                 if (currentPage === 'students') renderStudentTable();
                 if (currentPage === 'dashboard') refreshDashboard();
@@ -2624,18 +2633,20 @@
             }, (err) => {
                 console.error('Students error:', err);
                 showToast('Error loading students: ' + err.message, 'error');
-                // Still show empty state
                 students = [];
                 renderStudentTable();
                 refreshDashboard();
             });
 
-            // Attendance - NO orderBy to avoid composite index requirement
+            // Attendance
             if (attendanceListener) attendanceListener();
             const qAtt = query(collection(db, 'attendance'), where('uid', '==', uid));
             attendanceListener = onSnapshot(qAtt, (snapshot) => {
                 attendance = [];
-                snapshot.forEach(doc => { attendance.push({ id: doc.id, ...doc.data() }); });
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    attendance.push({ docId: doc.id, ...data });
+                });
                 // Sort client-side by date descending
                 attendance.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
                 if (currentPage === 'dashboard') refreshDashboard();
@@ -2880,8 +2891,8 @@
                         <td>${s.section || '—'}</td>
                         <td style="text-align:center;">
                             <div class="actions-cell" style="justify-content:center;">
-                                <button onclick="window.editStudent('${s.id}')"><i class="fas fa-edit"></i></button>
-                                <button class="danger" onclick="window.deleteStudent('${s.id}')"><i class="fas fa-trash"></i></button>
+                                <button onclick="window.editStudent('${s.docId}')"><i class="fas fa-edit"></i></button>
+                                <button class="danger" onclick="window.deleteStudent('${s.docId}')"><i class="fas fa-trash"></i></button>
                             </div>
                         </td>
                     </tr>
@@ -2903,7 +2914,7 @@
             studentModal.classList.add('open');
             if (student) {
                 studentModalTitle.textContent = 'Edit Student';
-                editStudentId.value = student.id;
+                editStudentId.value = student.docId; // Store Firestore doc ID
                 sRoll.value = student.roll || '';
                 sId.value = student.id || '';
                 sName.value = student.name || '';
@@ -2954,13 +2965,15 @@
                 return;
             }
 
-            const editId = editStudentId.value;
+            const editDocId = editStudentId.value;
             try {
-                if (editId) {
-                    const docRef = doc(db, 'students', editId);
+                if (editDocId) {
+                    // Update existing student using docId
+                    const docRef = doc(db, 'students', editDocId);
                     await updateDoc(docRef, data);
                     showToast('Student updated!', 'success');
                 } else {
+                    // Check if custom ID already exists
                     const existing = students.find(s => s.id === data.id);
                     if (existing) {
                         showToast('Student ID already exists!', 'error');
@@ -2979,15 +2992,15 @@
             }
         });
 
-        window.editStudent = function(id) {
-            const student = students.find(s => s.id === id);
+        window.editStudent = function(docId) {
+            const student = students.find(s => s.docId === docId);
             if (student) openStudentModal(student);
         };
 
-        window.deleteStudent = function(id) {
-            showConfirm('Delete Student', `Delete student ${id}?`, async () => {
+        window.deleteStudent = function(docId) {
+            showConfirm('Delete Student', `Delete this student?`, async () => {
                 try {
-                    await deleteDoc(doc(db, 'students', id));
+                    await deleteDoc(doc(db, 'students', docId));
                     showToast('Student deleted.', 'info');
                 } catch (err) { showToast(err.message, 'error'); }
             });
@@ -3046,7 +3059,7 @@
             currentAttStudents = classStudents.map(s => ({
                 ...s,
                 status: statusMap[s.id] || 'unmarked',
-                attId: existing.find(a => a.studentId === s.id)?.id || null
+                attId: existing.find(a => a.studentId === s.id)?.docId || null
             }));
 
             renderAttendanceList();
@@ -3112,7 +3125,7 @@
 
             try {
                 const existing = attendance.filter(a => a.date === date && a.class === cls && a.section === sec);
-                for (const ex of existing) { await deleteDoc(doc(db, 'attendance', ex.id)); }
+                for (const ex of existing) { await deleteDoc(doc(db, 'attendance', ex.docId)); }
 
                 const batch = writeBatch(db);
                 for (const s of toSave) {
@@ -3140,7 +3153,7 @@
         attDate.addEventListener('change', loadAttendanceStudents);
 
         // ============================================================
-        // REPORTS
+        // REPORTS - Enhanced with student search and filters
         // ============================================================
         function populateReportFilters() {
             const classes = [...new Set(students.map(s => s.class).filter(Boolean))].sort();
@@ -3152,21 +3165,50 @@
             reportSection.innerHTML = `<option value="">All Sections</option>` + sections.map(s =>
                 `<option value="${s}" ${s===curSection?'selected':''}>${s}</option>`).join('');
 
-            const curStudent = reportStudent.value;
-            reportStudent.innerHTML = `<option value="">Select Student</option>` + students.map(s =>
-                `<option value="${s.id}" ${s.id===curStudent?'selected':''}>${s.name} (${s.id})</option>`).join('');
+            // Update student dropdown based on class/section and search
+            updateStudentDropdown();
 
+            // Toggle visibility based on report type
             const type = reportType.value;
             if (type === 'student') {
                 reportStudentGroup.style.display = 'block';
-                reportClassGroup.style.display = 'none';
-                reportSectionGroup.style.display = 'none';
+                reportStudentSelectGroup.style.display = 'block';
+                reportClassGroup.style.display = 'block';
+                reportSectionGroup.style.display = 'block';
             } else {
                 reportStudentGroup.style.display = 'none';
+                reportStudentSelectGroup.style.display = 'none';
                 reportClassGroup.style.display = 'block';
                 reportSectionGroup.style.display = 'block';
             }
         }
+
+        function updateStudentDropdown() {
+            const cls = reportClass.value;
+            const sec = reportSection.value;
+            const search = studentSearchInput.value.toLowerCase().trim();
+
+            let filtered = students;
+            if (cls) filtered = filtered.filter(s => s.class === cls);
+            if (sec) filtered = filtered.filter(s => s.section === sec);
+            if (search) {
+                filtered = filtered.filter(s =>
+                    (s.name || '').toLowerCase().includes(search) ||
+                    (s.id || '').toLowerCase().includes(search) ||
+                    (s.roll || '').toLowerCase().includes(search)
+                );
+            }
+
+            const curStudent = reportStudent.value;
+            reportStudent.innerHTML = `<option value="">Select Student</option>` + filtered.map(s =>
+                `<option value="${s.id}" ${s.id===curStudent?'selected':''}>${s.name} (${s.id})</option>`
+            ).join('');
+        }
+
+        // Event listeners for student search and class/section changes
+        studentSearchInput.addEventListener('input', updateStudentDropdown);
+        reportClass.addEventListener('change', updateStudentDropdown);
+        reportSection.addEventListener('change', updateStudentDropdown);
 
         reportType.addEventListener('change', populateReportFilters);
 
@@ -3414,6 +3456,8 @@
         if (!attDate.value) { attDate.value = new Date().toISOString().split('T')[0]; }
 
         console.log('🚀 Attendix v2.0 — Firebase ready with Google Login & Fixed Index Issue');
+        console.log('✅ Student update fixed: using docId for updates');
+        console.log('✅ Individual report enhanced with class, section, and search filters');
 
         // Fallback load if auth doesn't trigger quickly
         setTimeout(() => {
@@ -3421,25 +3465,10 @@
                 hideLoader();
             }
         }, 3000);
-
-        // Show helpful message about Firebase setup
-        setTimeout(() => {
-            if (!currentUser) {
-                console.log('💡 Firebase Setup Checklist:');
-                console.log('1. Enable Email/Password in Authentication → Sign-in methods');
-                console.log('2. Enable Google in Authentication → Sign-in methods');
-                console.log('3. Create Firestore Database in test mode');
-                console.log('4. Add your domain to Authorized domains');
-                console.log('5. No composite indexes needed (queries now sort client-side)');
-            }
-        }, 1000);
     </script>
 
-    <!-- ============================================================
-    FIREBASE SETUP INSTRUCTIONS - Displayed in console
-    ============================================================ -->
+    <!-- Setup instructions -->
     <script>
-        // Show setup instructions in console
         console.log('%c🔥 FIREBASE SETUP CHECKLIST', 'font-size:16px;font-weight:bold;');
         console.log('%c1. Enable Email/Password → Authentication → Sign-in methods', 'font-size:13px;');
         console.log('%c2. Enable Google → Authentication → Sign-in methods', 'font-size:13px;');
