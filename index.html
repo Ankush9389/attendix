@@ -76,11 +76,9 @@
             padding: 0;
             box-sizing: border-box;
         }
-
         html {
             scroll-behavior: smooth;
         }
-
         body {
             font-family: 'Poppins', sans-serif;
             background: var(--bg);
@@ -89,7 +87,6 @@
             overflow-x: hidden;
             min-height: 100vh;
         }
-
         a {
             text-decoration: none;
             color: inherit;
@@ -121,7 +118,6 @@
             border-radius: 10px;
         }
 
-        /* Loader */
         .loader-overlay {
             position: fixed;
             inset: 0;
@@ -150,7 +146,6 @@
             }
         }
 
-        /* Toast */
         .toast-container {
             position: fixed;
             top: 24px;
@@ -223,9 +218,7 @@
             }
         }
 
-        /* ============================================================
-                   LOGIN PAGE
-                   ============================================================ */
+        /* ===== LOGIN PAGE ===== */
         #loginPage {
             min-height: 100vh;
             display: flex;
@@ -431,20 +424,6 @@
         .btn-primary:active {
             transform: scale(0.97);
         }
-        .btn-primary .ripple {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(0);
-            animation: rippleAnim 0.6s ease-out;
-            pointer-events: none;
-        }
-        @keyframes rippleAnim {
-            to {
-                transform: scale(4);
-                opacity: 0;
-            }
-        }
 
         .login-footer {
             text-align: center;
@@ -458,9 +437,7 @@
             cursor: pointer;
         }
 
-        /* ============================================================
-                   APP LAYOUT
-                   ============================================================ */
+        /* ===== APP LAYOUT ===== */
         #app {
             display: none;
             min-height: 100vh;
@@ -685,7 +662,7 @@
             display: block;
         }
 
-        /* Stats Grid */
+        /* Stats */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -800,9 +777,6 @@
             color: var(--primary);
         }
 
-        .mini-calendar {
-            width: 100%;
-        }
         .mini-calendar .cal-header {
             display: flex;
             justify-content: space-between;
@@ -892,7 +866,7 @@
             white-space: nowrap;
         }
 
-        /* Page Toolbar */
+        /* Table */
         .page-toolbar {
             display: flex;
             flex-wrap: wrap;
@@ -1003,29 +977,11 @@
             background: #DC2626;
             transform: translateY(-1px);
         }
-        .btn-warning {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 22px;
-            border-radius: var(--radius-sm);
-            background: var(--warning);
-            color: #fff;
-            font-weight: 600;
-            font-size: 0.85rem;
-            transition: background 0.2s, transform 0.15s;
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);
-        }
-        .btn-warning:hover {
-            background: #D97706;
-            transform: translateY(-1px);
-        }
         .btn-sm {
             padding: 6px 14px;
             font-size: 0.75rem;
         }
 
-        /* Table */
         .table-wrap {
             overflow-x: auto;
             background: var(--card);
@@ -1105,7 +1061,7 @@
             color: var(--text);
         }
 
-        /* Attendance Controls */
+        /* Attendance */
         .attendance-controls {
             display: flex;
             flex-wrap: wrap;
@@ -1166,21 +1122,6 @@
         .attendance-controls .form-group .btn-group button:hover {
             border-color: var(--primary);
             color: var(--primary);
-        }
-        .attendance-controls .form-group .btn-group button.active-pres {
-            background: var(--success);
-            color: #fff;
-            border-color: var(--success);
-        }
-        .attendance-controls .form-group .btn-group button.active-abs {
-            background: var(--danger);
-            color: #fff;
-            border-color: var(--danger);
-        }
-        .attendance-controls .form-group .btn-group button.active-leave {
-            background: var(--warning);
-            color: #fff;
-            border-color: var(--warning);
         }
 
         .attendance-student-item {
@@ -1253,7 +1194,7 @@
             border-color: var(--warning);
         }
 
-        /* Report Filters */
+        /* Reports */
         .report-filters {
             display: flex;
             flex-wrap: wrap;
@@ -1566,7 +1507,6 @@
             color: var(--text);
         }
 
-        /* Confirm Dialog */
         .confirm-dialog .modal-box {
             max-width: 400px;
             text-align: center;
@@ -1592,7 +1532,6 @@
                 grid-template-columns: 1fr;
             }
         }
-
         @media (max-width: 768px) {
             :root {
                 --sidebar-width: 280px;
@@ -1684,7 +1623,6 @@
                 justify-content: center;
             }
         }
-
         @media (max-width: 480px) {
             .stats-grid {
                 grid-template-columns: 1fr 1fr;
@@ -1729,7 +1667,6 @@
                 font-size: 0.7rem;
             }
         }
-
         @media print {
             .sidebar,
             .app-header,
@@ -1773,9 +1710,7 @@
     <!-- TOAST CONTAINER -->
     <div class="toast-container" id="toastContainer"></div>
 
-    <!-- ============================================================
-    LOGIN PAGE
-    ============================================================ -->
+    <!-- ===== LOGIN PAGE ===== -->
     <div id="loginPage">
         <div class="login-card">
             <div class="login-brand">
@@ -1821,9 +1756,7 @@
         </div>
     </div>
 
-    <!-- ============================================================
-    APP
-    ============================================================ -->
+    <!-- ===== APP ===== -->
     <div id="app">
 
         <!-- SIDEBAR -->
@@ -2095,9 +2028,9 @@
                     </div>
                 </section>
 
-            </div><!-- /page-content -->
-        </div><!-- /main-content -->
-    </div><!-- /app -->
+            </div>
+        </div>
+    </div>
 
     <!-- STUDENT MODAL -->
     <div class="modal-overlay" id="studentModal">
@@ -2167,11 +2100,12 @@
         // ============================================================
         // FIREBASE IMPORTS
         // ============================================================
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
+        import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged,
-            updateProfile, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
-        import { getFirestore, collection, query, where, getDocs, addDoc, updateDoc, deleteDoc, doc, onSnapshot,
-            orderBy, limit, getDoc, setDoc, writeBatch, Timestamp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+            updateProfile, sendPasswordResetEmail, fetchSignInMethodsForEmail }
+        from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
+        import { getFirestore, collection, query, getDocs, addDoc, updateDoc, deleteDoc, doc, onSnapshot,
+            writeBatch, orderBy, limit } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-analytics.js";
 
         // Firebase Config
@@ -2185,10 +2119,35 @@
             measurementId: "G-TE3XY9K9G1"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
+        // Initialize Firebase (only once)
+        let app;
+        try {
+            if (!getApps().length) {
+                app = initializeApp(firebaseConfig);
+            } else {
+                app = getApps()[0];
+            }
+            console.log('✅ Firebase initialized successfully');
+        } catch (err) {
+            console.error('❌ Firebase init error:', err);
+            document.body.innerHTML =
+                `<div style="display:flex;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;gap:16px;padding:20px;text-align:center;font-family:sans-serif;">
+                    <div style="font-size:3rem;">⚠️</div>
+                    <h2>Firebase Configuration Error</h2>
+                    <p style="color:#666;max-width:500px;">${err.message || 'Unknown error'}</p>
+                    <p style="color:#999;font-size:0.85rem;">Please check your Firebase config and ensure Email/Password authentication is enabled in the Firebase Console.</p>
+                    <div style="background:#f1f5f9;padding:16px;border-radius:8px;text-align:left;max-width:500px;width:100%;font-size:0.75rem;color:#333;overflow:auto;">
+                        <strong>Quick Fix:</strong><br>
+                        1. Go to Firebase Console → Authentication<br>
+                        2. Click "Get started" → Enable "Email/Password"<br>
+                        3. Add your domain to "Authorized domains"
+                    </div>
+                </div>`;
+        }
+
         const auth = getAuth(app);
         const db = getFirestore(app);
+        const analytics = getAnalytics(app);
 
         // ============================================================
         // GLOBALS
@@ -2204,6 +2163,7 @@
         let monthlyChartInstance = null;
         let pieChartInstance = null;
         let profileChartInstance = null;
+        let authReady = false;
 
         // ============================================================
         // DOM REFS
@@ -2226,7 +2186,6 @@
         const signupTab = $('signupTab');
         const loginFooter = $('loginFooter');
         const forgotPwLink = $('forgotPwLink');
-        const rememberMe = $('rememberMe');
 
         const sidebar = $('sidebar');
         const menuToggle = $('menuToggle');
@@ -2240,7 +2199,6 @@
         const userName = $('userName');
         const userAvatar = $('userAvatar');
 
-        // Dashboard
         const statTotal = $('statTotal');
         const statPresent = $('statPresent');
         const statAbsent = $('statAbsent');
@@ -2248,14 +2206,12 @@
         const statPercent = $('statPercent');
         const recentActivity = $('recentActivity');
 
-        // Students
         const studentSearch = $('studentSearch');
         const filterClass = $('filterClass');
         const filterSection = $('filterSection');
         const studentTableBody = $('studentTableBody');
         const addStudentBtn = $('addStudentBtn');
 
-        // Student Modal
         const studentModal = $('studentModal');
         const studentModalTitle = $('studentModalTitle');
         const closeStudentModal = $('closeStudentModal');
@@ -2271,7 +2227,6 @@
         const sMobile = $('sMobile');
         const sAddress = $('sAddress');
 
-        // Attendance
         const attClass = $('attClass');
         const attSection = $('attSection');
         const attDate = $('attDate');
@@ -2280,7 +2235,6 @@
         const markAllAbsent = $('markAllAbsent');
         const saveAttendanceBtn = $('saveAttendanceBtn');
 
-        // Reports
         const reportType = $('reportType');
         const reportClass = $('reportClass');
         const reportMonth = $('reportMonth');
@@ -2291,7 +2245,6 @@
         const downloadCsv = $('downloadCsv');
         const downloadJson = $('downloadJson');
 
-        // Profile
         const profTotal = $('profTotal');
         const profPresent = $('profPresent');
         const profAbsent = $('profAbsent');
@@ -2300,7 +2253,6 @@
         const profileName = $('profileName');
         const profileEmail = $('profileEmail');
 
-        // Settings
         const exportAllData = $('exportAllData');
         const clearAllData = $('clearAllData');
         const settingsName = $('settingsName');
@@ -2312,7 +2264,6 @@
         const editProfileForm = $('editProfileForm');
         const editProfileName = $('editProfileName');
 
-        // Confirm
         const confirmModal = $('confirmModal');
         const confirmTitle = $('confirmTitle');
         const confirmMessage = $('confirmMessage');
@@ -2323,18 +2274,10 @@
         // TOAST SYSTEM
         // ============================================================
         function showToast(message, type = 'info', duration = 3200) {
-            const icons = {
-                info: 'fa-circle-info',
-                success: 'fa-check-circle',
-                error: 'fa-circle-exclamation',
-                warning: 'fa-triangle-exclamation'
-            };
-            const colors = {
-                info: 'var(--primary)',
-                success: 'var(--success)',
-                error: 'var(--danger)',
-                warning: 'var(--warning)'
-            };
+            const icons = { info: 'fa-circle-info', success: 'fa-check-circle', error: 'fa-circle-exclamation',
+                warning: 'fa-triangle-exclamation' };
+            const colors = { info: 'var(--primary)', success: 'var(--success)', error: 'var(--danger)',
+                warning: 'var(--warning)' };
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
             toast.innerHTML = `
@@ -2343,10 +2286,8 @@
                     <button class="toast-close"><i class="fas fa-times"></i></button>
                 `;
             toastContainer.appendChild(toast);
-            const close = () => {
-                toast.classList.add('removing');
-                setTimeout(() => toast.remove(), 400);
-            };
+            const close = () => { toast.classList.add('removing');
+                setTimeout(() => toast.remove(), 400); };
             toast.querySelector('.toast-close').addEventListener('click', close);
             setTimeout(close, duration);
         }
@@ -2354,12 +2295,7 @@
         // ============================================================
         // LOADER
         // ============================================================
-        function hideLoader() {
-            setTimeout(() => loader.classList.add('hide'), 300);
-        }
-        function showLoader() {
-            loader.classList.remove('hide');
-        }
+        function hideLoader() { setTimeout(() => loader.classList.add('hide'), 300); }
 
         // ============================================================
         // THEME
@@ -2367,26 +2303,22 @@
         function applyTheme(theme) {
             document.documentElement.setAttribute('data-theme', theme === 'dark' ? 'dark' : 'light');
             const icon = themeToggle.querySelector('i');
-            if (theme === 'dark') {
-                icon.className = 'fas fa-sun';
-                darkModeToggle.classList.add('active');
-            } else {
-                icon.className = 'fas fa-moon';
-                darkModeToggle.classList.remove('active');
-            }
+            if (theme === 'dark') { icon.className = 'fas fa-sun';
+                darkModeToggle.classList.add('active'); } else { icon.className = 'fas fa-moon';
+                darkModeToggle.classList.remove('active'); }
             localStorage.setItem('attendix_theme', theme);
         }
-
-        function toggleTheme() {
-            const current = document.documentElement.getAttribute('data-theme');
-            applyTheme(current === 'dark' ? 'light' : 'dark');
-        }
-
         const savedTheme = localStorage.getItem('attendix_theme') || 'light';
         applyTheme(savedTheme);
 
-        themeToggle.addEventListener('click', toggleTheme);
-        darkModeToggle.addEventListener('click', toggleTheme);
+        themeToggle.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            applyTheme(current === 'dark' ? 'light' : 'dark');
+        });
+        darkModeToggle.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            applyTheme(current === 'dark' ? 'light' : 'dark');
+        });
 
         // ============================================================
         // CLOCK
@@ -2404,7 +2336,6 @@
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 currentUser = user;
-                // Update UI
                 const displayName = user.displayName || 'Teacher';
                 const email = user.email || 'teacher@attendix.com';
                 userName.textContent = displayName;
@@ -2418,16 +2349,16 @@
                 loginPage.style.display = 'none';
                 appEl.classList.add('active');
 
-                // Load data
                 await loadAllData();
                 navigateTo('dashboard');
                 hideLoader();
+                authReady = true;
             } else {
                 currentUser = null;
+                authReady = true;
                 appEl.classList.remove('active');
                 loginPage.style.display = 'flex';
                 hideLoader();
-                // Clear data
                 students = [];
                 attendance = [];
                 activities = [];
@@ -2449,13 +2380,15 @@
                 loginTab.style.color = '#fff';
                 signupTab.style.background = 'transparent';
                 signupTab.style.color = 'var(--text-secondary)';
-                loginFooter.innerHTML = 'Demo: demo@attendix.com / password123<br><span style="font-size:0.7rem;opacity:0.6;">Or sign up with a new account</span>';
+                loginFooter.innerHTML =
+                    'Demo: demo@attendix.com / password123<br><span style="font-size:0.7rem;opacity:0.6;">Or sign up with a new account</span>';
             } else {
                 signupTab.style.background = 'var(--primary)';
                 signupTab.style.color = '#fff';
                 loginTab.style.background = 'transparent';
                 loginTab.style.color = 'var(--text-secondary)';
-                loginFooter.innerHTML = 'Create a new account to get started.<br><span style="font-size:0.7rem;opacity:0.6;">Already have an account? Sign in.</span>';
+                loginFooter.innerHTML =
+                    'Create a new account to get started.<br><span style="font-size:0.7rem;opacity:0.6;">Already have an account? Sign in.</span>';
             }
         }
 
@@ -2465,22 +2398,15 @@
         togglePw.addEventListener('click', () => {
             const input = loginPassword;
             const icon = togglePw.querySelector('i');
-            if (input.type === 'password') {
-                input.type = 'text';
-                icon.className = 'fas fa-eye-slash';
-            } else {
-                input.type = 'password';
-                icon.className = 'fas fa-eye';
-            }
+            if (input.type === 'password') { input.type = 'text';
+                icon.className = 'fas fa-eye-slash'; } else { input.type = 'password';
+                icon.className = 'fas fa-eye'; }
         });
 
         forgotPwLink.addEventListener('click', async (e) => {
             e.preventDefault();
             const email = loginEmail.value.trim();
-            if (!email) {
-                showToast('Please enter your email address.', 'warning');
-                return;
-            }
+            if (!email) { showToast('Please enter your email address.', 'warning'); return; }
             try {
                 await sendPasswordResetEmail(auth, email);
                 showToast('Password reset email sent! Check your inbox.', 'success');
@@ -2493,13 +2419,8 @@
             e.preventDefault();
             const email = loginEmail.value.trim();
             const password = loginPassword.value.trim();
+            if (!email || !password) { showToast('Please fill in all fields.', 'error'); return; }
 
-            if (!email || !password) {
-                showToast('Please fill in all fields.', 'error');
-                return;
-            }
-
-            showLoader();
             try {
                 if (isLoginMode) {
                     await signInWithEmailAndPassword(auth, email, password);
@@ -2510,8 +2431,11 @@
                     showToast('Account created! Welcome.', 'success');
                 }
             } catch (err) {
-                showToast(err.message, 'error');
-                hideLoader();
+                if (err.code === 'auth/operation-not-allowed') {
+                    showToast('Email/Password authentication is not enabled. Please enable it in the Firebase Console → Authentication → Sign-in methods.', 'error');
+                } else {
+                    showToast(err.message, 'error');
+                }
             }
         });
 
@@ -2533,21 +2457,13 @@
         // ============================================================
         function navigateTo(page) {
             currentPage = page;
-            navLinks.forEach(link => {
-                link.classList.toggle('active', link.dataset.page === page);
-            });
+            navLinks.forEach(link => { link.classList.toggle('active', link.dataset.page === page); });
             $$('.page-section').forEach(el => el.classList.remove('active'));
             const target = $('page-' + page);
             if (target) target.classList.add('active');
 
-            const titles = {
-                dashboard: 'Dashboard',
-                students: 'Students',
-                attendance: 'Attendance',
-                reports: 'Reports',
-                profile: 'Profile',
-                settings: 'Settings'
-            };
+            const titles = { dashboard: 'Dashboard', students: 'Students', attendance: 'Attendance', reports: 'Reports',
+                profile: 'Profile', settings: 'Settings' };
             pageTitle.textContent = titles[page] || page;
             sidebar.classList.remove('open');
 
@@ -2578,14 +2494,12 @@
         async function loadAllData() {
             if (!currentUser) return;
 
-            // Load students
+            // Students
             if (studentsListener) studentsListener();
             const qStudents = query(collection(db, 'students'), orderBy('name'));
             studentsListener = onSnapshot(qStudents, (snapshot) => {
                 students = [];
-                snapshot.forEach(doc => {
-                    students.push({ id: doc.id, ...doc.data() });
-                });
+                snapshot.forEach(doc => { students.push({ id: doc.id, ...doc.data() }); });
                 if (currentPage === 'students') renderStudentTable();
                 if (currentPage === 'dashboard') refreshDashboard();
                 if (currentPage === 'attendance') loadAttendanceStudents();
@@ -2593,38 +2507,27 @@
                 populateFilterDropdowns();
                 populateAttDropdowns();
                 populateReportFilters();
-            }, (err) => {
-                console.error('Students listener error:', err);
-            });
+            }, (err) => { console.error('Students listener error:', err); });
 
-            // Load attendance
+            // Attendance
             if (attendanceListener) attendanceListener();
             const qAtt = query(collection(db, 'attendance'), orderBy('date', 'desc'));
             attendanceListener = onSnapshot(qAtt, (snapshot) => {
                 attendance = [];
-                snapshot.forEach(doc => {
-                    attendance.push({ id: doc.id, ...doc.data() });
-                });
+                snapshot.forEach(doc => { attendance.push({ id: doc.id, ...doc.data() }); });
                 if (currentPage === 'dashboard') refreshDashboard();
                 if (currentPage === 'attendance') loadAttendanceStudents();
                 if (currentPage === 'profile') refreshProfile();
-                if (currentPage === 'reports') { /* handled on generate */ }
-            }, (err) => {
-                console.error('Attendance listener error:', err);
-            });
+            }, (err) => { console.error('Attendance listener error:', err); });
 
-            // Load activities
+            // Activities
             if (activitiesListener) activitiesListener();
             const qAct = query(collection(db, 'activities'), orderBy('createdAt', 'desc'), limit(20));
             activitiesListener = onSnapshot(qAct, (snapshot) => {
                 activities = [];
-                snapshot.forEach(doc => {
-                    activities.push({ id: doc.id, ...doc.data() });
-                });
+                snapshot.forEach(doc => { activities.push({ id: doc.id, ...doc.data() }); });
                 if (currentPage === 'dashboard') refreshDashboard();
-            }, (err) => {
-                console.error('Activities listener error:', err);
-            });
+            }, (err) => { console.error('Activities listener error:', err); });
         }
 
         // ============================================================
@@ -2655,7 +2558,6 @@
             profAbsent.textContent = absent;
             profPercent.textContent = percent + '%';
 
-            // Activities
             if (activities.length === 0) {
                 recentActivity.innerHTML =
                     `<div class="activity-item" style="color:var(--text-secondary);font-size:0.85rem;">No recent activity.</div>`;
@@ -2749,10 +2651,8 @@
             if (profileChartInstance) profileChartInstance.destroy();
             const ctx3 = document.getElementById('profileChart').getContext('2d');
             const last6 = [];
-            for (let i = 5; i >= 0; i--) {
-                const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-                last6.push(d);
-            }
+            for (let i = 5; i >= 0; i--) { const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+                last6.push(d); }
             const pLabels = last6.map(d => months[d.getMonth()]);
             const pData = last6.map(d => {
                 const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
@@ -2794,7 +2694,6 @@
             const today = now.getDate();
             const todayMonth = now.getMonth();
             const todayYear = now.getFullYear();
-
             const firstDay = new Date(calYear, calMonth, 1).getDay();
             const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
             const daysInPrev = new Date(calYear, calMonth, 0).getDate();
@@ -2817,11 +2716,8 @@
                         <div class="cal-day" style="font-weight:600;font-size:0.7rem;color:var(--text-secondary);">Fr</div>
                         <div class="cal-day" style="font-weight:600;font-size:0.7rem;color:var(--text-secondary);">Sa</div>
                     `;
-
-            for (let i = firstDay - 1; i >= 0; i--) {
-                const d = daysInPrev - i;
-                html += `<div class="cal-day other">${d}</div>`;
-            }
+            for (let i = firstDay - 1; i >= 0; i--) { const d = daysInPrev - i;
+                html += `<div class="cal-day other">${d}</div>`; }
             for (let d = 1; d <= daysInMonth; d++) {
                 const isToday = (d === today && calMonth === todayMonth && calYear === todayYear);
                 const isWeekend = (new Date(calYear, calMonth, d).getDay() === 0 || new Date(calYear, calMonth, d)
@@ -2831,9 +2727,7 @@
             }
             const totalCells = firstDay + daysInMonth;
             const remaining = (7 - (totalCells % 7)) % 7;
-            for (let d = 1; d <= remaining; d++) {
-                html += `<div class="cal-day other">${d}</div>`;
-            }
+            for (let d = 1; d <= remaining; d++) { html += `<div class="cal-day other">${d}</div>`; }
             html += '</div>';
             container.innerHTML = html;
         }
@@ -2922,9 +2816,7 @@
             }
         }
 
-        function closeStudentModalFn() {
-            studentModal.classList.remove('open');
-        }
+        function closeStudentModalFn() { studentModal.classList.remove('open'); }
 
         addStudentBtn.addEventListener('click', () => openStudentModal(null));
         closeStudentModal.addEventListener('click', closeStudentModalFn);
@@ -2952,18 +2844,13 @@
             const editId = editStudentId.value;
             try {
                 if (editId) {
-                    // Edit
                     const docRef = doc(db, 'students', editId);
                     await updateDoc(docRef, data);
                     await addActivity(`Updated student: ${data.name} (${data.id})`);
                     showToast('Student updated successfully!', 'success');
                 } else {
-                    // Add - check if ID exists
                     const existing = students.find(s => s.id === data.id);
-                    if (existing) {
-                        showToast('Student ID already exists!', 'error');
-                        return;
-                    }
+                    if (existing) { showToast('Student ID already exists!', 'error'); return; }
                     await addDoc(collection(db, 'students'), { ...data, createdAt: new Date().toISOString() });
                     await addActivity(`Added new student: ${data.name} (${data.id})`);
                     showToast('Student added successfully!', 'success');
@@ -2971,9 +2858,7 @@
                 closeStudentModalFn();
                 renderStudentTable();
                 refreshDashboard();
-            } catch (err) {
-                showToast(err.message, 'error');
-            }
+            } catch (err) { showToast(err.message, 'error'); }
         });
 
         window.editStudent = function(id) {
@@ -2989,9 +2874,7 @@
                     renderStudentTable();
                     refreshDashboard();
                     showToast('Student deleted.', 'info');
-                } catch (err) {
-                    showToast(err.message, 'error');
-                }
+                } catch (err) { showToast(err.message, 'error'); }
             });
         };
 
@@ -3060,7 +2943,8 @@
                     `<div class="empty-state"><i class="fas fa-users"></i><h3>No Students</h3><p>No students to mark attendance.</p></div>`;
                 return;
             }
-            let html = `<div style="background:var(--card);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;">`;
+            let html =
+                `<div style="background:var(--card);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;">`;
             currentAttStudents.forEach((s, idx) => {
                 const status = s.status || 'unmarked';
                 const isPresent = status === 'present';
@@ -3110,24 +2994,14 @@
             const cls = attClass.value;
             const sec = attSection.value;
             const date = attDate.value;
-            if (!cls || !sec || !date) {
-                showToast('Please select class, section and date.', 'error');
-                return;
-            }
+            if (!cls || !sec || !date) { showToast('Please select class, section and date.', 'error'); return; }
             const toSave = currentAttStudents.filter(s => s.status && s.status !== 'unmarked');
-            if (toSave.length === 0) {
-                showToast('No attendance to save. Mark some students first.', 'warning');
-                return;
-            }
+            if (toSave.length === 0) { showToast('No attendance to save. Mark some students first.', 'warning'); return; }
 
             try {
-                // Remove old entries for this date/class/section that are being updated
                 const existing = attendance.filter(a => a.date === date && a.class === cls && a.section === sec);
-                for (const ex of existing) {
-                    await deleteDoc(doc(db, 'attendance', ex.id));
-                }
+                for (const ex of existing) { await deleteDoc(doc(db, 'attendance', ex.id)); }
 
-                // Save new entries
                 const batch = writeBatch(db);
                 for (const s of toSave) {
                     const ref = doc(collection(db, 'attendance'));
@@ -3147,9 +3021,7 @@
                 showToast(`Attendance saved! ${toSave.length} students marked.`, 'success');
                 refreshDashboard();
                 loadAttendanceStudents();
-            } catch (err) {
-                showToast(err.message, 'error');
-            }
+            } catch (err) { showToast(err.message, 'error'); }
         });
 
         attClass.addEventListener('change', loadAttendanceStudents);
@@ -3307,12 +3179,10 @@
         // ============================================================
         // SETTINGS
         // ============================================================
-        // Edit Profile
         editProfileBtn.addEventListener('click', () => {
             editProfileName.value = currentUser?.displayName || 'Teacher';
             editProfileModal.classList.add('open');
         });
-
         closeEditProfile.addEventListener('click', () => editProfileModal.classList.remove('open'));
         cancelEditProfile.addEventListener('click', () => editProfileModal.classList.remove('open'));
         editProfileModal.addEventListener('click', (e) => { if (e.target === editProfileModal) editProfileModal.classList
@@ -3321,10 +3191,7 @@
         editProfileForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const name = editProfileName.value.trim();
-            if (!name) {
-                showToast('Please enter a name.', 'error');
-                return;
-            }
+            if (!name) { showToast('Please enter a name.', 'error'); return; }
             try {
                 await updateProfile(currentUser, { displayName: name });
                 userName.textContent = name;
@@ -3334,19 +3201,12 @@
                 settingsName.textContent = name;
                 showToast('Profile updated!', 'success');
                 editProfileModal.classList.remove('open');
-            } catch (err) {
-                showToast(err.message, 'error');
-            }
+            } catch (err) { showToast(err.message, 'error'); }
         });
 
-        // Export Data
         exportAllData.addEventListener('click', () => {
-            const data = {
-                students,
-                attendance,
-                exportedAt: new Date().toISOString(),
-                user: currentUser ? { email: currentUser.email, displayName: currentUser.displayName } : null
-            };
+            const data = { students, attendance, exportedAt: new Date().toISOString(), user: currentUser ? { email: currentUser
+                        .email, displayName: currentUser.displayName } : null };
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -3357,24 +3217,20 @@
             showToast('Data exported successfully.', 'success');
         });
 
-        // Clear All Data
         clearAllData.addEventListener('click', () => {
             showConfirm('Clear All Data', 'This will permanently delete all students and attendance records from Firebase. Are you sure?',
                 async () => {
                     try {
-                        // Delete all students
                         const studentsSnap = await getDocs(collection(db, 'students'));
                         const batch1 = writeBatch(db);
                         studentsSnap.forEach(doc => batch1.delete(doc.ref));
                         await batch1.commit();
 
-                        // Delete all attendance
                         const attSnap = await getDocs(collection(db, 'attendance'));
                         const batch2 = writeBatch(db);
                         attSnap.forEach(doc => batch2.delete(doc.ref));
                         await batch2.commit();
 
-                        // Delete activities
                         const actSnap = await getDocs(collection(db, 'activities'));
                         const batch3 = writeBatch(db);
                         actSnap.forEach(doc => batch3.delete(doc.ref));
@@ -3385,9 +3241,7 @@
                         renderStudentTable();
                         refreshDashboard();
                         loadAttendancePage();
-                    } catch (err) {
-                        showToast(err.message, 'error');
-                    }
+                    } catch (err) { showToast(err.message, 'error'); }
                 });
         });
 
@@ -3401,9 +3255,7 @@
                     time: new Date().toLocaleString(),
                     createdAt: new Date().toISOString()
                 });
-            } catch (err) {
-                console.error('Failed to add activity:', err);
-            }
+            } catch (err) { console.error('Failed to add activity:', err); }
         }
 
         // ============================================================
@@ -3416,23 +3268,14 @@
             confirmModal.classList.add('open');
         }
 
-        confirmCancel.addEventListener('click', () => {
+        confirmCancel.addEventListener('click', () => { confirmModal.classList.remove('open');
+            confirmCallback = null; });
+        confirmOk.addEventListener('click', () => { if (confirmCallback) confirmCallback();
             confirmModal.classList.remove('open');
-            confirmCallback = null;
-        });
-
-        confirmOk.addEventListener('click', () => {
-            if (confirmCallback) confirmCallback();
-            confirmModal.classList.remove('open');
-            confirmCallback = null;
-        });
-
-        confirmModal.addEventListener('click', (e) => {
-            if (e.target === confirmModal) {
-                confirmModal.classList.remove('open');
-                confirmCallback = null;
-            }
-        });
+            confirmCallback = null; });
+        confirmModal.addEventListener('click', (e) => { if (e.target === confirmModal) { confirmModal.classList.remove(
+                    'open');
+                confirmCallback = null; } });
 
         // ============================================================
         // KEYBOARD SHORTCUTS
@@ -3441,39 +3284,44 @@
             if (e.key === 'Escape') {
                 if (studentModal.classList.contains('open')) closeStudentModalFn();
                 if (editProfileModal.classList.contains('open')) editProfileModal.classList.remove('open');
-                if (confirmModal.classList.contains('open')) {
-                    confirmModal.classList.remove('open');
-                    confirmCallback = null;
-                }
+                if (confirmModal.classList.contains('open')) { confirmModal.classList.remove('open');
+                    confirmCallback = null; }
             }
-            if (e.ctrlKey && e.key === 's') {
-                e.preventDefault();
-                if (currentPage === 'attendance') saveAttendanceBtn.click();
-            }
+            if (e.ctrlKey && e.key === 's') { e.preventDefault(); if (currentPage === 'attendance') saveAttendanceBtn
+                    .click(); }
         });
 
         // ============================================================
         // INIT
         // ============================================================
-        // Expose functions to global
         window.editStudent = editStudent;
         window.deleteStudent = deleteStudent;
         window.markAtt = markAtt;
         window.changeCalMonth = changeCalMonth;
 
-        // Set default date for attendance
-        if (!attDate.value) {
-            attDate.value = new Date().toISOString().split('T')[0];
-        }
+        if (!attDate.value) { attDate.value = new Date().toISOString().split('T')[0]; }
 
         console.log('🚀 Attendix with Firebase loaded successfully!');
-        console.log(`📚 ${students.length} students, ${attendance.length} attendance records`);
 
-        // If user is already logged in, data will load via onAuthStateChanged
-        // Otherwise, show login page
+        // If no user, hide loader after a moment
         if (!currentUser) {
-            hideLoader();
+            setTimeout(hideLoader, 500);
         }
+
+        // Check if auth is enabled and show helpful message if not
+        setTimeout(async () => {
+            if (!currentUser && authReady) {
+                try {
+                    // Just a ping to see if auth is working
+                    await fetchSignInMethodsForEmail(auth, 'ping@test.com');
+                } catch (err) {
+                    if (err.code === 'auth/operation-not-allowed') {
+                        showToast('⚠️ Email/Password authentication is not enabled. Please enable it in Firebase Console → Authentication → Sign-in methods.',
+                            'warning', 6000);
+                    }
+                }
+            }
+        }, 2000);
     </script>
 </body>
 </html>
