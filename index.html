@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
 
-    <!-- Font Awesome 6 (Free) -->
+    <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 
     <!-- Chart.js CDN -->
@@ -218,232 +218,10 @@
             }
         }
 
-        /* ===== LOGIN PAGE ===== */
-        #loginPage {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(145deg, var(--bg) 0%, #e2e8f0 100%);
-            padding: 20px;
-            position: relative;
-            overflow: hidden;
-        }
-        [data-theme="dark"] #loginPage {
-            background: linear-gradient(145deg, #0F172A 0%, #1E293B 100%);
-        }
-        #loginPage::before {
-            content: '';
-            position: absolute;
-            width: 600px;
-            height: 600px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(37, 99, 235, 0.12) 0%, transparent 70%);
-            top: -200px;
-            right: -200px;
-            pointer-events: none;
-        }
-        #loginPage::after {
-            content: '';
-            position: absolute;
-            width: 400px;
-            height: 400px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(37, 99, 235, 0.08) 0%, transparent 70%);
-            bottom: -100px;
-            left: -100px;
-            pointer-events: none;
-        }
-
-        .login-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius);
-            box-shadow: var(--glass-shadow), var(--shadow);
-            padding: 48px 40px;
-            max-width: 440px;
-            width: 100%;
-            position: relative;
-            z-index: 2;
-            transition: background var(--transition), border var(--transition), box-shadow var(--transition);
-            animation: fadeUp 0.7s ease;
-        }
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .login-brand {
-            text-align: center;
-            margin-bottom: 32px;
-        }
-        .login-brand .logo-icon {
-            font-size: 3rem;
-            color: var(--primary);
-            background: rgba(37, 99, 235, 0.12);
-            width: 72px;
-            height: 72px;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 12px;
-        }
-        .login-brand h1 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-        }
-        .login-brand h1 span {
-            color: var(--primary);
-        }
-        .login-brand p {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            margin-top: 4px;
-        }
-
-        .login-form .form-group {
-            margin-bottom: 18px;
-        }
-        .login-form label {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 5px;
-            color: var(--text-secondary);
-        }
-        .login-form .input-wrap {
-            position: relative;
-            display: flex;
-            align-items: center;
-            background: var(--card);
-            border-radius: var(--radius-sm);
-            border: 2px solid var(--border);
-            transition: border var(--transition), box-shadow var(--transition);
-        }
-        .login-form .input-wrap:focus-within {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
-        }
-        .login-form .input-wrap i {
-            padding: 0 14px;
-            color: var(--text-secondary);
-            font-size: 1rem;
-        }
-        .login-form .input-wrap input {
-            width: 100%;
-            padding: 14px 14px 14px 0;
-            background: transparent;
-            color: var(--text);
-            font-size: 0.95rem;
-            border: none;
-            outline: none;
-        }
-        .login-form .input-wrap input::placeholder {
-            color: var(--text-secondary);
-            opacity: 0.6;
-        }
-        .login-form .input-wrap .toggle-pw {
-            padding: 0 14px;
-            color: var(--text-secondary);
-            font-size: 1rem;
-            cursor: pointer;
-            transition: color 0.2s;
-            background: none;
-            border: none;
-        }
-        .login-form .input-wrap .toggle-pw:hover {
-            color: var(--text);
-        }
-
-        .login-form .form-options {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 6px 0 22px;
-            font-size: 0.85rem;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        .login-form .form-options label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 400;
-            color: var(--text-secondary);
-            cursor: pointer;
-        }
-        .login-form .form-options label input[type="checkbox"] {
-            accent-color: var(--primary);
-            width: 16px;
-            height: 16px;
-            cursor: pointer;
-        }
-        .login-form .form-options a {
-            color: var(--primary);
-            font-weight: 500;
-            transition: color 0.2s;
-            cursor: pointer;
-        }
-        .login-form .form-options a:hover {
-            color: var(--primary-dark);
-            text-decoration: underline;
-        }
-
-        .btn-primary {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            width: 100%;
-            padding: 14px;
-            background: var(--primary);
-            color: #fff;
-            font-weight: 600;
-            font-size: 1rem;
-            border-radius: var(--radius-sm);
-            transition: background 0.3s, transform 0.15s, box-shadow 0.3s;
-            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-        .btn-primary:hover {
-            background: var(--primary-dark);
-            box-shadow: 0 6px 24px rgba(37, 99, 235, 0.4);
-            transform: translateY(-1px);
-        }
-        .btn-primary:active {
-            transform: scale(0.97);
-        }
-
-        .login-footer {
-            text-align: center;
-            margin-top: 24px;
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-        }
-        .login-footer a {
-            color: var(--primary);
-            font-weight: 500;
-            cursor: pointer;
-        }
-
         /* ===== APP LAYOUT ===== */
         #app {
-            display: none;
-            min-height: 100vh;
-        }
-        #app.active {
             display: flex;
+            min-height: 100vh;
         }
 
         .sidebar {
@@ -541,17 +319,6 @@
             width: 4px;
             background: var(--primary);
             border-radius: 0 4px 4px 0;
-        }
-        .sidebar-nav a.logout-link {
-            margin-top: auto;
-            color: var(--danger);
-            border-top: 1px solid var(--border);
-            padding-top: 18px;
-            margin-top: 12px;
-        }
-        .sidebar-nav a.logout-link:hover {
-            background: rgba(239, 68, 68, 0.08);
-            color: var(--danger);
         }
 
         .sidebar-close {
@@ -660,6 +427,16 @@
         }
         .page-section.active {
             display: block;
+        }
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Stats */
@@ -1570,9 +1347,6 @@
             .stat-card .stat-value {
                 font-size: 1.4rem;
             }
-            .login-card {
-                padding: 32px 20px;
-            }
             .profile-header {
                 flex-direction: column;
                 text-align: center;
@@ -1639,17 +1413,6 @@
                 right: 12px;
                 bottom: 10px;
             }
-            .login-card {
-                padding: 24px 16px;
-            }
-            .login-brand .logo-icon {
-                width: 56px;
-                height: 56px;
-                font-size: 2.2rem;
-            }
-            .login-brand h1 {
-                font-size: 1.4rem;
-            }
             .modal-box {
                 padding: 18px 14px;
             }
@@ -1710,52 +1473,6 @@
     <!-- TOAST CONTAINER -->
     <div class="toast-container" id="toastContainer"></div>
 
-    <!-- ===== LOGIN PAGE ===== -->
-    <div id="loginPage">
-        <div class="login-card">
-            <div class="login-brand">
-                <div class="logo-icon"><i class="fas fa-graduation-cap"></i></div>
-                <h1>Attendix<span>.</span></h1>
-                <p>Smart Student Attendance Management</p>
-            </div>
-            <form class="login-form" id="loginForm" autocomplete="off">
-                <div id="authToggle" style="text-align:center;margin-bottom:16px;">
-                    <span style="display:inline-flex;background:var(--bg);border-radius:30px;padding:4px;border:2px solid var(--border);">
-                        <button type="button" id="loginTab" class="active" style="padding:8px 24px;border-radius:30px;font-weight:600;font-size:0.85rem;background:var(--primary);color:#fff;border:none;cursor:pointer;transition:all 0.2s;">Sign In</button>
-                        <button type="button" id="signupTab" style="padding:8px 24px;border-radius:30px;font-weight:600;font-size:0.85rem;background:transparent;color:var(--text-secondary);border:none;cursor:pointer;transition:all 0.2s;">Sign Up</button>
-                    </span>
-                </div>
-                <div class="form-group">
-                    <label><i class="fas fa-envelope" style="margin-right:6px;"></i> Email</label>
-                    <div class="input-wrap">
-                        <i class="fas fa-envelope"></i>
-                        <input type="email" id="loginEmail" placeholder="teacher@school.com" value="demo@attendix.com" required />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label><i class="fas fa-lock" style="margin-right:6px;"></i> Password</label>
-                    <div class="input-wrap">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="loginPassword" placeholder="••••••••" value="password123" required />
-                        <button type="button" class="toggle-pw" id="togglePw"><i class="fas fa-eye"></i></button>
-                    </div>
-                </div>
-                <div class="form-options">
-                    <label><input type="checkbox" id="rememberMe" checked /> Remember me</label>
-                    <a href="#" id="forgotPwLink">Forgot password?</a>
-                </div>
-                <button type="submit" class="btn-primary" id="loginBtn">
-                    <i class="fas fa-arrow-right-to-bracket"></i> <span id="loginBtnText">Sign In</span>
-                </button>
-            </form>
-            <div class="login-footer" id="loginFooter">
-                Demo: demo@attendix.com / password123
-                <br>
-                <span style="font-size:0.7rem;opacity:0.6;">Or sign up with a new account</span>
-            </div>
-        </div>
-    </div>
-
     <!-- ===== APP ===== -->
     <div id="app">
 
@@ -1775,7 +1492,6 @@
                 <div class="nav-label" style="margin-top:12px;">Account</div>
                 <a href="#" data-page="profile"><i class="fas fa-user-circle"></i> Profile</a>
                 <a href="#" data-page="settings"><i class="fas fa-cog"></i> Settings</a>
-                <a href="#" class="logout-link" id="logoutLink"><i class="fas fa-sign-out-alt"></i> Logout</a>
             </nav>
         </aside>
 
@@ -1979,8 +1695,8 @@
                         <div class="profile-avatar" id="profileAvatar">T</div>
                         <div class="profile-info">
                             <h2 id="profileName">Teacher Account</h2>
-                            <p id="profileEmail">admin@attendix.com</p>
-                            <span class="profile-badge"><i class="fas fa-check-circle"></i> Verified</span>
+                            <p id="profileEmail">teacher@attendix.com</p>
+                            <span class="profile-badge"><i class="fas fa-check-circle"></i> Connected to Firebase</span>
                         </div>
                     </div>
                     <div class="profile-stats">
@@ -2011,7 +1727,7 @@
                             <button class="btn-outline btn-sm" id="editProfileBtn">Edit</button>
                         </div>
                         <div class="settings-row">
-                            <div><div class="label">Email</div><div class="desc" id="settingsEmail">admin@attendix.com</div></div>
+                            <div><div class="label">Email</div><div class="desc" id="settingsEmail">teacher@attendix.com</div></div>
                             <button class="btn-outline btn-sm" disabled>Change</button>
                         </div>
                     </div>
@@ -2022,7 +1738,7 @@
                             <button class="btn-outline btn-sm" id="exportAllData"><i class="fas fa-download"></i> Export</button>
                         </div>
                         <div class="settings-row">
-                            <div><div class="label">Clear All Data</div><div class="desc">Permanently delete all students and attendance</div></div>
+                            <div><div class="label">Clear All Data</div><div class="desc">Permanently delete all students and attendance from Firebase</div></div>
                             <button class="btn-danger btn-sm" id="clearAllData"><i class="fas fa-trash"></i> Clear</button>
                         </div>
                     </div>
@@ -2101,11 +1817,10 @@
         // FIREBASE IMPORTS
         // ============================================================
         import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged,
-            updateProfile, sendPasswordResetEmail, fetchSignInMethodsForEmail }
+        import { getAuth, signInAnonymously, onAuthStateChanged, updateProfile }
         from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
         import { getFirestore, collection, query, getDocs, addDoc, updateDoc, deleteDoc, doc, onSnapshot,
-            writeBatch, orderBy, limit } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+            writeBatch, orderBy, limit, setDoc } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-analytics.js";
 
         // Firebase Config
@@ -2119,7 +1834,7 @@
             measurementId: "G-TE3XY9K9G1"
         };
 
-        // Initialize Firebase (only once)
+        // Initialize Firebase
         let app;
         try {
             if (!getApps().length) {
@@ -2133,15 +1848,9 @@
             document.body.innerHTML =
                 `<div style="display:flex;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;gap:16px;padding:20px;text-align:center;font-family:sans-serif;">
                     <div style="font-size:3rem;">⚠️</div>
-                    <h2>Firebase Configuration Error</h2>
+                    <h2>Firebase Connection Error</h2>
                     <p style="color:#666;max-width:500px;">${err.message || 'Unknown error'}</p>
-                    <p style="color:#999;font-size:0.85rem;">Please check your Firebase config and ensure Email/Password authentication is enabled in the Firebase Console.</p>
-                    <div style="background:#f1f5f9;padding:16px;border-radius:8px;text-align:left;max-width:500px;width:100%;font-size:0.75rem;color:#333;overflow:auto;">
-                        <strong>Quick Fix:</strong><br>
-                        1. Go to Firebase Console → Authentication<br>
-                        2. Click "Get started" → Enable "Email/Password"<br>
-                        3. Add your domain to "Authorized domains"
-                    </div>
+                    <p style="color:#999;font-size:0.85rem;">Check your Firebase config and network connection.</p>
                 </div>`;
         }
 
@@ -2159,11 +1868,10 @@
         let currentPage = 'dashboard';
         let editingStudentId = null;
         let confirmCallback = null;
-        let isLoginMode = true;
         let monthlyChartInstance = null;
         let pieChartInstance = null;
         let profileChartInstance = null;
-        let authReady = false;
+        let isInitialized = false;
 
         // ============================================================
         // DOM REFS
@@ -2174,24 +1882,10 @@
         const loader = $('loader');
         const toastContainer = $('toastContainer');
 
-        const loginPage = $('loginPage');
-        const appEl = $('app');
-        const loginForm = $('loginForm');
-        const loginEmail = $('loginEmail');
-        const loginPassword = $('loginPassword');
-        const togglePw = $('togglePw');
-        const loginBtn = $('loginBtn');
-        const loginBtnText = $('loginBtnText');
-        const loginTab = $('loginTab');
-        const signupTab = $('signupTab');
-        const loginFooter = $('loginFooter');
-        const forgotPwLink = $('forgotPwLink');
-
         const sidebar = $('sidebar');
         const menuToggle = $('menuToggle');
         const sidebarClose = $('sidebarClose');
         const navLinks = $$('.sidebar-nav a[data-page]');
-        const logoutLink = $('logoutLink');
         const pageTitle = $('pageTitle');
         const themeToggle = $('themeToggle');
         const darkModeToggle = $('darkModeToggle');
@@ -2295,7 +1989,7 @@
         // ============================================================
         // LOADER
         // ============================================================
-        function hideLoader() { setTimeout(() => loader.classList.add('hide'), 300); }
+        function hideLoader() { setTimeout(() => loader.classList.add('hide'), 400); }
 
         // ============================================================
         // THEME
@@ -2331,7 +2025,7 @@
         updateClock();
 
         // ============================================================
-        // AUTH STATE
+        // AUTH - Auto Anonymous Sign In
         // ============================================================
         onAuthStateChanged(auth, async (user) => {
             if (user) {
@@ -2346,109 +2040,29 @@
                 settingsName.textContent = displayName;
                 settingsEmail.textContent = email;
 
-                loginPage.style.display = 'none';
-                appEl.classList.add('active');
-
-                await loadAllData();
-                navigateTo('dashboard');
-                hideLoader();
-                authReady = true;
-            } else {
-                currentUser = null;
-                authReady = true;
-                appEl.classList.remove('active');
-                loginPage.style.display = 'flex';
-                hideLoader();
-                students = [];
-                attendance = [];
-                activities = [];
-                renderStudentTable();
-                refreshDashboard();
-            }
-        });
-
-        // ============================================================
-        // LOGIN / SIGNUP
-        // ============================================================
-        function setAuthMode(mode) {
-            isLoginMode = mode === 'login';
-            loginBtnText.textContent = isLoginMode ? 'Sign In' : 'Sign Up';
-            loginTab.classList.toggle('active', isLoginMode);
-            signupTab.classList.toggle('active', !isLoginMode);
-            if (isLoginMode) {
-                loginTab.style.background = 'var(--primary)';
-                loginTab.style.color = '#fff';
-                signupTab.style.background = 'transparent';
-                signupTab.style.color = 'var(--text-secondary)';
-                loginFooter.innerHTML =
-                    'Demo: demo@attendix.com / password123<br><span style="font-size:0.7rem;opacity:0.6;">Or sign up with a new account</span>';
-            } else {
-                signupTab.style.background = 'var(--primary)';
-                signupTab.style.color = '#fff';
-                loginTab.style.background = 'transparent';
-                loginTab.style.color = 'var(--text-secondary)';
-                loginFooter.innerHTML =
-                    'Create a new account to get started.<br><span style="font-size:0.7rem;opacity:0.6;">Already have an account? Sign in.</span>';
-            }
-        }
-
-        loginTab.addEventListener('click', () => setAuthMode('login'));
-        signupTab.addEventListener('click', () => setAuthMode('signup'));
-
-        togglePw.addEventListener('click', () => {
-            const input = loginPassword;
-            const icon = togglePw.querySelector('i');
-            if (input.type === 'password') { input.type = 'text';
-                icon.className = 'fas fa-eye-slash'; } else { input.type = 'password';
-                icon.className = 'fas fa-eye'; }
-        });
-
-        forgotPwLink.addEventListener('click', async (e) => {
-            e.preventDefault();
-            const email = loginEmail.value.trim();
-            if (!email) { showToast('Please enter your email address.', 'warning'); return; }
-            try {
-                await sendPasswordResetEmail(auth, email);
-                showToast('Password reset email sent! Check your inbox.', 'success');
-            } catch (err) {
-                showToast(err.message, 'error');
-            }
-        });
-
-        loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = loginEmail.value.trim();
-            const password = loginPassword.value.trim();
-            if (!email || !password) { showToast('Please fill in all fields.', 'error'); return; }
-
-            try {
-                if (isLoginMode) {
-                    await signInWithEmailAndPassword(auth, email, password);
-                    showToast('Welcome back!', 'success');
-                } else {
-                    const userCred = await createUserWithEmailAndPassword(auth, email, password);
-                    await updateProfile(userCred.user, { displayName: 'Teacher' });
-                    showToast('Account created! Welcome.', 'success');
+                if (!isInitialized) {
+                    await loadAllData();
+                    navigateTo('dashboard');
+                    isInitialized = true;
+                    hideLoader();
+                    showToast('Connected to Firebase 🔥', 'success', 2000);
                 }
-            } catch (err) {
-                if (err.code === 'auth/operation-not-allowed') {
-                    showToast('Email/Password authentication is not enabled. Please enable it in the Firebase Console → Authentication → Sign-in methods.', 'error');
-                } else {
-                    showToast(err.message, 'error');
+            } else {
+                // Not signed in - try anonymous sign in
+                try {
+                    await signInAnonymously(auth);
+                    console.log('✅ Signed in anonymously');
+                } catch (err) {
+                    console.warn('Anonymous sign-in failed, trying to use Firestore anyway:', err.message);
+                    // Still try to load data - maybe security rules allow public access
+                    if (!isInitialized) {
+                        await loadAllData();
+                        navigateTo('dashboard');
+                        isInitialized = true;
+                        hideLoader();
+                        showToast('Running in offline mode', 'warning', 2000);
+                    }
                 }
-            }
-        });
-
-        // ============================================================
-        // LOGOUT
-        // ============================================================
-        logoutLink.addEventListener('click', async (e) => {
-            e.preventDefault();
-            try {
-                await signOut(auth);
-                showToast('Logged out.', 'info');
-            } catch (err) {
-                showToast(err.message, 'error');
             }
         });
 
@@ -2492,42 +2106,73 @@
         let activitiesListener = null;
 
         async function loadAllData() {
-            if (!currentUser) return;
-
             // Students
             if (studentsListener) studentsListener();
-            const qStudents = query(collection(db, 'students'), orderBy('name'));
-            studentsListener = onSnapshot(qStudents, (snapshot) => {
+            try {
+                const qStudents = query(collection(db, 'students'), orderBy('name'));
+                studentsListener = onSnapshot(qStudents, (snapshot) => {
+                    students = [];
+                    snapshot.forEach(doc => { students.push({ id: doc.id, ...doc.data() }); });
+                    if (currentPage === 'students') renderStudentTable();
+                    if (currentPage === 'dashboard') refreshDashboard();
+                    if (currentPage === 'attendance') loadAttendanceStudents();
+                    if (currentPage === 'profile') refreshProfile();
+                    populateFilterDropdowns();
+                    populateAttDropdowns();
+                    populateReportFilters();
+                }, (err) => {
+                    console.error('Students listener error:', err);
+                    // If Firestore fails, use empty data
+                    students = [];
+                    renderStudentTable();
+                    refreshDashboard();
+                });
+            } catch (err) {
+                console.warn('Could not set up students listener:', err);
                 students = [];
-                snapshot.forEach(doc => { students.push({ id: doc.id, ...doc.data() }); });
-                if (currentPage === 'students') renderStudentTable();
-                if (currentPage === 'dashboard') refreshDashboard();
-                if (currentPage === 'attendance') loadAttendanceStudents();
-                if (currentPage === 'profile') refreshProfile();
-                populateFilterDropdowns();
-                populateAttDropdowns();
-                populateReportFilters();
-            }, (err) => { console.error('Students listener error:', err); });
+                renderStudentTable();
+                refreshDashboard();
+            }
 
             // Attendance
             if (attendanceListener) attendanceListener();
-            const qAtt = query(collection(db, 'attendance'), orderBy('date', 'desc'));
-            attendanceListener = onSnapshot(qAtt, (snapshot) => {
+            try {
+                const qAtt = query(collection(db, 'attendance'), orderBy('date', 'desc'));
+                attendanceListener = onSnapshot(qAtt, (snapshot) => {
+                    attendance = [];
+                    snapshot.forEach(doc => { attendance.push({ id: doc.id, ...doc.data() }); });
+                    if (currentPage === 'dashboard') refreshDashboard();
+                    if (currentPage === 'attendance') loadAttendanceStudents();
+                    if (currentPage === 'profile') refreshProfile();
+                }, (err) => {
+                    console.error('Attendance listener error:', err);
+                    attendance = [];
+                    refreshDashboard();
+                });
+            } catch (err) {
+                console.warn('Could not set up attendance listener:', err);
                 attendance = [];
-                snapshot.forEach(doc => { attendance.push({ id: doc.id, ...doc.data() }); });
-                if (currentPage === 'dashboard') refreshDashboard();
-                if (currentPage === 'attendance') loadAttendanceStudents();
-                if (currentPage === 'profile') refreshProfile();
-            }, (err) => { console.error('Attendance listener error:', err); });
+                refreshDashboard();
+            }
 
             // Activities
             if (activitiesListener) activitiesListener();
-            const qAct = query(collection(db, 'activities'), orderBy('createdAt', 'desc'), limit(20));
-            activitiesListener = onSnapshot(qAct, (snapshot) => {
+            try {
+                const qAct = query(collection(db, 'activities'), orderBy('createdAt', 'desc'), limit(20));
+                activitiesListener = onSnapshot(qAct, (snapshot) => {
+                    activities = [];
+                    snapshot.forEach(doc => { activities.push({ id: doc.id, ...doc.data() }); });
+                    if (currentPage === 'dashboard') refreshDashboard();
+                }, (err) => {
+                    console.error('Activities listener error:', err);
+                    activities = [];
+                    refreshDashboard();
+                });
+            } catch (err) {
+                console.warn('Could not set up activities listener:', err);
                 activities = [];
-                snapshot.forEach(doc => { activities.push({ id: doc.id, ...doc.data() }); });
-                if (currentPage === 'dashboard') refreshDashboard();
-            }, (err) => { console.error('Activities listener error:', err); });
+                refreshDashboard();
+            }
         }
 
         // ============================================================
@@ -3193,7 +2838,9 @@
             const name = editProfileName.value.trim();
             if (!name) { showToast('Please enter a name.', 'error'); return; }
             try {
-                await updateProfile(currentUser, { displayName: name });
+                if (currentUser) {
+                    await updateProfile(currentUser, { displayName: name });
+                }
                 userName.textContent = name;
                 userAvatar.textContent = name.charAt(0).toUpperCase();
                 profileAvatar.textContent = name.charAt(0).toUpperCase();
@@ -3301,27 +2948,18 @@
 
         if (!attDate.value) { attDate.value = new Date().toISOString().split('T')[0]; }
 
-        console.log('🚀 Attendix with Firebase loaded successfully!');
+        console.log('🚀 Attendix loaded — Firebase auto-sync enabled');
 
-        // If no user, hide loader after a moment
-        if (!currentUser) {
-            setTimeout(hideLoader, 500);
-        }
-
-        // Check if auth is enabled and show helpful message if not
-        setTimeout(async () => {
-            if (!currentUser && authReady) {
-                try {
-                    // Just a ping to see if auth is working
-                    await fetchSignInMethodsForEmail(auth, 'ping@test.com');
-                } catch (err) {
-                    if (err.code === 'auth/operation-not-allowed') {
-                        showToast('⚠️ Email/Password authentication is not enabled. Please enable it in Firebase Console → Authentication → Sign-in methods.',
-                            'warning', 6000);
-                    }
-                }
+        // If auth state doesn't trigger (e.g., no network), fallback load
+        setTimeout(() => {
+            if (!isInitialized) {
+                console.log('⏳ Fallback: Loading data without auth...');
+                loadAllData();
+                navigateTo('dashboard');
+                isInitialized = true;
+                hideLoader();
             }
-        }, 2000);
+        }, 3000);
     </script>
 </body>
 </html>
