@@ -3,18 +3,26 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Attendix – Smart Attendance</title>
+    <title>Attendix – Premium School Management</title>
 
-    <!-- Google Fonts: Poppins -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
 
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 
-    <!-- Chart.js CDN -->
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
+    </script>
+
+    <!-- JsBarcode -->
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js">
+    </script>
+
+    <!-- html2canvas for PDF/Image export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
     </script>
 
     <!-- Firebase Import Map -->
@@ -31,44 +39,42 @@
 
     <style>
         /* ============================================================
-                   CSS VARIABLES & RESET - COMPLETE
+                   ROOT VARIABLES
                    ============================================================ */
         :root {
-            --primary: #2563EB;
-            --primary-light: #3B82F6;
-            --primary-dark: #1D4ED8;
-            --primary-rgb: 37, 99, 235;
-            --success: #22C55E;
-            --danger: #EF4444;
-            --warning: #F59E0B;
+            --primary: #0A1628;
+            --primary-light: #1a2a4a;
+            --primary-dark: #060e1a;
+            --accent: #C9A84C;
+            --accent-light: #D4B85A;
+            --accent-dark: #B8963E;
+            --gold-gradient: linear-gradient(135deg, #C9A84C, #E8D5A3);
             --bg: #F0F4F8;
             --card: #FFFFFF;
-            --text: #1E293B;
-            --text-secondary: #64748B;
-            --border: #E2E8F0;
-            --shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-            --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.12);
+            --text: #1A1A2E;
+            --text-secondary: #4A4A6A;
+            --text-light: #8A8AA8;
+            --border: #E8ECF0;
+            --shadow: 0 8px 40px rgba(10, 22, 40, 0.08);
+            --shadow-hover: 0 12px 56px rgba(10, 22, 40, 0.14);
             --radius: 16px;
             --radius-sm: 10px;
+            --radius-lg: 24px;
             --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            --header-height: 60px;
-            --bottom-nav-height: 65px;
-            --glass-bg: rgba(255, 255, 255, 0.78);
-            --glass-border: rgba(255, 255, 255, 0.3);
-            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+            --header-height: 64px;
+            --bottom-nav-height: 60px;
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
         [data-theme="dark"] {
-            --bg: #0F172A;
-            --card: #1E293B;
-            --text: #F1F5F9;
-            --text-secondary: #94A3B8;
-            --border: #334155;
-            --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.4);
-            --glass-bg: rgba(30, 41, 59, 0.82);
-            --glass-border: rgba(255, 255, 255, 0.06);
-            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --bg: #0A0A1A;
+            --card: #14142A;
+            --text: #EEEEF4;
+            --text-secondary: #B0B0C8;
+            --text-light: #6A6A8A;
+            --border: #2A2A4A;
+            --shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
+            --shadow-hover: 0 12px 56px rgba(0, 0, 0, 0.6);
         }
 
         * {
@@ -76,12 +82,14 @@
             padding: 0;
             box-sizing: border-box;
         }
+
         html {
             scroll-behavior: smooth;
             height: 100%;
         }
+
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: var(--font);
             background: var(--bg);
             color: var(--text);
             transition: background var(--transition), color var(--transition);
@@ -92,13 +100,14 @@
             overflow-x: hidden;
             -webkit-tap-highlight-color: transparent;
         }
+
         a {
             text-decoration: none;
             color: inherit;
         }
         button {
             cursor: pointer;
-            font-family: inherit;
+            font-family: var(--font);
             border: none;
             outline: none;
             background: none;
@@ -106,7 +115,7 @@
         input,
         select,
         textarea {
-            font-family: inherit;
+            font-family: var(--font);
             outline: none;
             border: none;
         }
@@ -119,11 +128,13 @@
             background: var(--bg);
         }
         ::-webkit-scrollbar-thumb {
-            background: var(--primary);
+            background: var(--accent);
             border-radius: 10px;
         }
 
-        /* LOADER */
+        /* ============================================================
+                   LOADER
+                   ============================================================ */
         .loader-overlay {
             position: fixed;
             inset: 0;
@@ -139,11 +150,11 @@
             visibility: hidden;
         }
         .loader {
-            width: 48px;
-            height: 48px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
-            border: 4px solid var(--border);
-            border-top-color: var(--primary);
+            border: 3px solid var(--border);
+            border-top-color: var(--accent);
             animation: spin 0.8s linear infinite;
         }
         @keyframes spin {
@@ -152,7 +163,9 @@
             }
         }
 
-        /* TOAST */
+        /* ============================================================
+                   TOAST
+                   ============================================================ */
         .toast-container {
             position: fixed;
             top: 16px;
@@ -162,7 +175,7 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
-            max-width: 420px;
+            max-width: 440px;
             width: 90%;
             pointer-events: none;
         }
@@ -172,7 +185,7 @@
             background: var(--card);
             color: var(--text);
             box-shadow: var(--shadow-hover);
-            border-left: 4px solid var(--primary);
+            border-left: 4px solid var(--accent);
             display: flex;
             align-items: center;
             gap: 12px;
@@ -185,13 +198,13 @@
             pointer-events: auto;
         }
         .toast.success {
-            border-left-color: var(--success);
+            border-left-color: #22C55E;
         }
         .toast.error {
-            border-left-color: var(--danger);
+            border-left-color: #EF4444;
         }
         .toast.warning {
-            border-left-color: var(--warning);
+            border-left-color: #F59E0B;
         }
         .toast i {
             font-size: 1.1rem;
@@ -229,56 +242,54 @@
             }
         }
 
-        /* LOGIN PAGE */
+        /* ============================================================
+                   LOGIN PAGE
+                   ============================================================ */
         #loginPage {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(145deg, var(--bg) 0%, #e2e8f0 100%);
+            background: linear-gradient(145deg, #0A1628 0%, #1a2a4a 100%);
             padding: 20px;
             position: relative;
             overflow: hidden;
         }
-        [data-theme="dark"] #loginPage {
-            background: linear-gradient(145deg, #0F172A 0%, #1E293B 100%);
-        }
         #loginPage::before {
             content: '';
             position: absolute;
-            width: 500px;
-            height: 500px;
+            width: 600px;
+            height: 600px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(37, 99, 235, 0.10) 0%, transparent 70%);
-            top: -200px;
+            background: radial-gradient(circle, rgba(201, 168, 76, 0.06) 0%, transparent 70%);
+            top: -300px;
             right: -200px;
             pointer-events: none;
         }
         #loginPage::after {
             content: '';
             position: absolute;
-            width: 350px;
-            height: 350px;
+            width: 400px;
+            height: 400px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(37, 99, 235, 0.07) 0%, transparent 70%);
-            bottom: -100px;
-            left: -100px;
+            background: radial-gradient(circle, rgba(201, 168, 76, 0.04) 0%, transparent 70%);
+            bottom: -200px;
+            left: -200px;
             pointer-events: none;
         }
 
         .login-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius);
-            box-shadow: var(--glass-shadow), var(--shadow);
-            padding: 40px 32px;
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-lg);
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
+            padding: 44px 36px;
             max-width: 420px;
             width: 100%;
             position: relative;
             z-index: 2;
-            transition: background var(--transition), border var(--transition);
             animation: fadeUp 0.6s ease;
         }
         @keyframes fadeUp {
@@ -294,32 +305,35 @@
 
         .login-brand {
             text-align: center;
-            margin-bottom: 28px;
+            margin-bottom: 32px;
         }
         .login-brand .logo-icon {
-            font-size: 2.6rem;
-            color: var(--primary);
-            background: rgba(37, 99, 235, 0.12);
-            width: 64px;
-            height: 64px;
+            font-size: 2.8rem;
+            color: var(--accent);
+            background: rgba(201, 168, 76, 0.12);
+            width: 72px;
+            height: 72px;
             border-radius: 50%;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            border: 2px solid rgba(201, 168, 76, 0.15);
         }
         .login-brand h1 {
-            font-size: 1.6rem;
-            font-weight: 700;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #fff;
             letter-spacing: -0.5px;
         }
         .login-brand h1 span {
-            color: var(--primary);
+            color: var(--accent);
         }
         .login-brand p {
-            color: var(--text-secondary);
+            color: rgba(255, 255, 255, 0.5);
             font-size: 0.85rem;
             margin-top: 2px;
+            font-weight: 400;
         }
 
         .login-form .form-group {
@@ -327,45 +341,46 @@
         }
         .login-form label {
             display: block;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 600;
             margin-bottom: 5px;
-            color: var(--text-secondary);
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         .login-form .input-wrap {
             position: relative;
             display: flex;
             align-items: center;
-            background: var(--card);
+            background: rgba(255, 255, 255, 0.06);
             border-radius: var(--radius-sm);
-            border: 2px solid var(--border);
+            border: 2px solid rgba(255, 255, 255, 0.08);
             transition: border var(--transition), box-shadow var(--transition);
         }
         .login-form .input-wrap:focus-within {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.10);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(201, 168, 76, 0.10);
         }
         .login-form .input-wrap i {
             padding: 0 12px;
-            color: var(--text-secondary);
+            color: rgba(255, 255, 255, 0.3);
             font-size: 0.9rem;
         }
         .login-form .input-wrap input {
             width: 100%;
             padding: 12px 12px 12px 0;
             background: transparent;
-            color: var(--text);
+            color: #fff;
             font-size: 0.9rem;
             border: none;
             outline: none;
         }
         .login-form .input-wrap input::placeholder {
-            color: var(--text-secondary);
-            opacity: 0.5;
+            color: rgba(255, 255, 255, 0.3);
         }
         .login-form .input-wrap .toggle-pw {
             padding: 0 12px;
-            color: var(--text-secondary);
+            color: rgba(255, 255, 255, 0.3);
             font-size: 0.9rem;
             cursor: pointer;
             transition: color 0.2s;
@@ -373,14 +388,14 @@
             border: none;
         }
         .login-form .input-wrap .toggle-pw:hover {
-            color: var(--text);
+            color: rgba(255, 255, 255, 0.6);
         }
 
         .login-form .form-options {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin: 6px 0 18px;
+            margin: 6px 0 20px;
             font-size: 0.8rem;
             flex-wrap: wrap;
             gap: 6px;
@@ -390,26 +405,27 @@
             align-items: center;
             gap: 6px;
             font-weight: 400;
-            color: var(--text-secondary);
+            color: rgba(255, 255, 255, 0.5);
             cursor: pointer;
             font-size: 0.8rem;
+            text-transform: none;
+            letter-spacing: 0;
         }
         .login-form .form-options label input[type="checkbox"] {
-            accent-color: var(--primary);
+            accent-color: var(--accent);
             width: 15px;
             height: 15px;
             cursor: pointer;
         }
         .login-form .form-options a {
-            color: var(--primary);
+            color: var(--accent);
             font-weight: 500;
             transition: color 0.2s;
             cursor: pointer;
             font-size: 0.8rem;
         }
         .login-form .form-options a:hover {
-            color: var(--primary-dark);
-            text-decoration: underline;
+            color: var(--accent-light);
         }
 
         .btn-primary {
@@ -418,27 +434,22 @@
             justify-content: center;
             gap: 8px;
             width: 100%;
-            padding: 13px;
-            background: var(--primary);
-            color: #fff;
-            font-weight: 600;
+            padding: 14px;
+            background: var(--accent);
+            color: #0A1628;
+            font-weight: 700;
             font-size: 0.95rem;
             border-radius: var(--radius-sm);
-            transition: background 0.3s, transform 0.15s, box-shadow 0.3s;
-            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.25);
+            transition: all 0.3s;
+            box-shadow: 0 4px 20px rgba(201, 168, 76, 0.25);
         }
         .btn-primary:hover {
-            background: var(--primary-dark);
-            box-shadow: 0 6px 24px rgba(37, 99, 235, 0.35);
-            transform: translateY(-1px);
+            background: var(--accent-light);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(201, 168, 76, 0.35);
         }
         .btn-primary:active {
             transform: scale(0.97);
-        }
-        .btn-primary:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
         }
 
         .btn-google {
@@ -448,34 +459,25 @@
             gap: 10px;
             width: 100%;
             padding: 13px;
-            background: #fff;
-            color: #333;
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
             font-weight: 600;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             border-radius: var(--radius-sm);
-            transition: background 0.3s, transform 0.15s, box-shadow 0.3s;
-            border: 2px solid #ddd;
+            transition: all 0.3s;
+            border: 2px solid rgba(255, 255, 255, 0.06);
             margin-top: 10px;
         }
         .btn-google:hover {
-            background: #f5f5f5;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            background: rgba(255, 255, 255, 0.14);
+            transform: translateY(-2px);
         }
         .btn-google:active {
             transform: scale(0.97);
         }
-        .btn-google img {
+        .btn-google svg {
             width: 20px;
             height: 20px;
-        }
-        [data-theme="dark"] .btn-google {
-            background: #2d2d3d;
-            color: #eee;
-            border-color: #444;
-        }
-        [data-theme="dark"] .btn-google:hover {
-            background: #3d3d4d;
         }
 
         .login-divider {
@@ -483,7 +485,7 @@
             align-items: center;
             gap: 14px;
             margin: 18px 0;
-            color: var(--text-secondary);
+            color: rgba(255, 255, 255, 0.2);
             font-size: 0.8rem;
         }
         .login-divider::before,
@@ -491,22 +493,24 @@
             content: '';
             flex: 1;
             height: 1px;
-            background: var(--border);
+            background: rgba(255, 255, 255, 0.06);
         }
 
         .login-footer {
             text-align: center;
             margin-top: 20px;
             font-size: 0.75rem;
-            color: var(--text-secondary);
+            color: rgba(255, 255, 255, 0.3);
         }
         .login-footer a {
-            color: var(--primary);
+            color: var(--accent);
             font-weight: 500;
             cursor: pointer;
         }
 
-        /* APP LAYOUT */
+        /* ============================================================
+                   APP LAYOUT
+                   ============================================================ */
         #app {
             display: none;
             flex-direction: column;
@@ -523,15 +527,14 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            background: var(--card);
             border-bottom: 1px solid var(--border);
             position: sticky;
             top: 0;
             z-index: 100;
             transition: background var(--transition), border var(--transition);
             flex-shrink: 0;
+            box-shadow: var(--shadow);
         }
         .app-header .header-left {
             display: flex;
@@ -540,15 +543,15 @@
         }
         .app-header .header-left .brand-icon {
             font-size: 1.4rem;
-            color: var(--primary);
+            color: var(--accent);
         }
         .app-header .header-left h2 {
-            font-size: 1.05rem;
+            font-size: 1rem;
             font-weight: 700;
             letter-spacing: -0.3px;
         }
         .app-header .header-left h2 span {
-            color: var(--primary);
+            color: var(--accent);
         }
         .app-header .header-right {
             display: flex;
@@ -564,7 +567,7 @@
             padding: 4px;
         }
         .app-header .header-right .theme-toggle:hover {
-            color: var(--primary);
+            color: var(--accent);
             transform: rotate(20deg);
         }
         .app-header .header-right .user-badge {
@@ -573,17 +576,18 @@
             gap: 8px;
             font-weight: 500;
             font-size: 0.8rem;
+            color: var(--text-secondary);
         }
         .app-header .header-right .user-badge .avatar {
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            background: var(--primary);
+            background: var(--accent);
             color: #fff;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 600;
+            font-weight: 700;
             font-size: 0.8rem;
         }
 
@@ -593,6 +597,7 @@
             padding: 16px 16px 8px;
             animation: fadeSlide 0.4s ease;
             overflow-y: auto;
+            max-height: calc(100vh - var(--header-height) - var(--bottom-nav-height));
         }
         @keyframes fadeSlide {
             from {
@@ -613,16 +618,14 @@
             display: block;
         }
 
-        /* BOTTOM NAV - VISIBLE ON ALL DEVICES */
+        /* BOTTOM NAV */
         .bottom-nav {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
             height: var(--bottom-nav-height);
-            background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            background: var(--card);
             border-top: 1px solid var(--border);
             display: flex;
             align-items: stretch;
@@ -631,6 +634,9 @@
             padding: 4px 0 env(safe-area-inset-bottom);
             transition: background var(--transition), border var(--transition);
             box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.04);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            background: var(--glass-bg);
         }
         [data-theme="dark"] .bottom-nav {
             box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.2);
@@ -642,32 +648,25 @@
             align-items: center;
             justify-content: center;
             flex: 1;
-            gap: 2px;
+            gap: 1px;
             padding: 4px 0;
             color: var(--text-secondary);
-            transition: color 0.2s, transform 0.2s;
+            transition: color 0.2s;
             position: relative;
             cursor: pointer;
             border: none;
             background: none;
-            font-family: inherit;
+            font-family: var(--font);
             -webkit-tap-highlight-color: transparent;
-        }
-        .bottom-nav .nav-item i {
-            font-size: 1.3rem;
-            transition: transform 0.3s, color 0.2s;
-        }
-        .bottom-nav .nav-item span {
             font-size: 0.6rem;
             font-weight: 500;
-            letter-spacing: 0.3px;
+        }
+        .bottom-nav .nav-item i {
+            font-size: 1.2rem;
             transition: color 0.2s;
         }
         .bottom-nav .nav-item.active {
-            color: var(--primary);
-        }
-        .bottom-nav .nav-item.active i {
-            transform: translateY(-2px) scale(1.05);
+            color: var(--accent);
         }
         .bottom-nav .nav-item.active::before {
             content: '';
@@ -675,125 +674,273 @@
             top: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 24px;
+            width: 20px;
             height: 3px;
-            background: var(--primary);
+            background: var(--accent);
             border-radius: 0 0 4px 4px;
         }
         .bottom-nav .nav-item:hover {
-            color: var(--primary);
+            color: var(--accent);
         }
         .bottom-nav .nav-item:active {
             transform: scale(0.92);
         }
 
-        /* STATS */
+        /* ============================================================
+                   SETUP MODAL
+                   ============================================================ */
+        .setup-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            padding: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+        .setup-overlay.open {
+            display: flex;
+        }
+        .setup-box {
+            background: var(--card);
+            border-radius: var(--radius-lg);
+            max-width: 560px;
+            width: 100%;
+            padding: 32px 30px;
+            box-shadow: var(--shadow-hover);
+            border: 1px solid var(--border);
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: scaleUp 0.3s ease;
+        }
+        .setup-box h2 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text);
+        }
+        .setup-box h2 i {
+            color: var(--accent);
+        }
+        .setup-box p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+        }
+        .setup-box .form-group {
+            margin-bottom: 14px;
+        }
+        .setup-box .form-group label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+        .setup-box .form-group input,
+        .setup-box .form-group select {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            border: 2px solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+            font-size: 0.9rem;
+            transition: border var(--transition);
+        }
+        .setup-box .form-group input:focus,
+        .setup-box .form-group select:focus {
+            border-color: var(--accent);
+            outline: none;
+        }
+        .setup-box .btn-primary {
+            width: auto;
+            padding: 12px 32px;
+            margin-top: 8px;
+        }
+        .setup-box .setup-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 16px;
+        }
+
+        /* ============================================================
+                   SCHOOL STATUS MODAL
+                   ============================================================ */
+        .status-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            padding: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+        .status-overlay.open {
+            display: flex;
+        }
+        .status-box {
+            background: var(--card);
+            border-radius: var(--radius-lg);
+            max-width: 420px;
+            width: 100%;
+            padding: 32px 28px;
+            box-shadow: var(--shadow-hover);
+            border: 1px solid var(--border);
+            text-align: center;
+            animation: scaleUp 0.3s ease;
+        }
+        .status-box .status-icon {
+            font-size: 3.2rem;
+            margin-bottom: 12px;
+            color: var(--accent);
+        }
+        .status-box h2 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .status-box p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+        .status-box .status-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .status-box .status-buttons button {
+            padding: 10px 28px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            min-width: 120px;
+        }
+        .status-box .status-buttons .btn-open {
+            background: #22C55E;
+            color: #fff;
+        }
+        .status-box .status-buttons .btn-open:hover {
+            background: #16A34A;
+            transform: translateY(-2px);
+        }
+        .status-box .status-buttons .btn-closed {
+            background: #EF4444;
+            color: #fff;
+        }
+        .status-box .status-buttons .btn-closed:hover {
+            background: #DC2626;
+            transform: translateY(-2px);
+        }
+
+        /* ============================================================
+                   DASHBOARD
+                   ============================================================ */
+        .dash-welcome {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 16px 20px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .dash-welcome h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+        .dash-welcome h3 small {
+            font-weight: 400;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+        .dash-welcome .school-status-badge {
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+        .dash-welcome .school-status-badge.open {
+            background: rgba(34, 197, 94, 0.12);
+            color: #22C55E;
+        }
+        .dash-welcome .school-status-badge.closed {
+            background: rgba(239, 68, 68, 0.12);
+            color: #EF4444;
+        }
+
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 12px;
-            margin-bottom: 18px;
+            margin-bottom: 16px;
         }
         .stat-card {
             background: var(--card);
             border-radius: var(--radius);
-            padding: 16px 18px;
+            padding: 14px 16px;
             box-shadow: var(--shadow);
             border: 1px solid var(--border);
             transition: all var(--transition);
             position: relative;
             overflow: hidden;
         }
-        .stat-card:active {
-            transform: scale(0.97);
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
         }
         .stat-card .stat-icon {
-            font-size: 1.4rem;
-            color: var(--primary);
-            opacity: 0.15;
+            font-size: 1.2rem;
+            color: var(--accent);
+            opacity: 0.2;
             position: absolute;
             right: 12px;
             bottom: 10px;
         }
         .stat-card .stat-label {
-            font-size: 0.7rem;
-            font-weight: 500;
+            font-size: 0.65rem;
+            font-weight: 600;
             color: var(--text-secondary);
             text-transform: uppercase;
             letter-spacing: 0.4px;
         }
         .stat-card .stat-value {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 700;
             margin-top: 2px;
             letter-spacing: -0.5px;
         }
-        .stat-card .stat-change {
-            font-size: 0.65rem;
-            font-weight: 500;
-            margin-top: 4px;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 1px 10px;
-            border-radius: 20px;
-            background: rgba(34, 197, 94, 0.12);
-            color: var(--success);
-        }
-        .stat-card .stat-change.down {
-            background: rgba(239, 68, 68, 0.12);
-            color: var(--danger);
-        }
-        .stat-card .stat-change i {
-            font-size: 0.6rem;
-        }
 
-        /* CHARTS */
-        .charts-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 18px;
-        }
-        .chart-card {
+        .calendar-widget {
             background: var(--card);
             border-radius: var(--radius);
             padding: 14px 16px;
             box-shadow: var(--shadow);
             border: 1px solid var(--border);
-            transition: background var(--transition), border var(--transition);
+            margin-bottom: 16px;
         }
-        .chart-card h4 {
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .chart-card h4 i {
-            color: var(--primary);
-        }
-        .chart-card .chart-wrap {
-            position: relative;
-            height: 140px;
-        }
-        .chart-card .chart-wrap canvas {
-            max-height: 100%;
-            max-width: 100%;
-        }
-
-        /* CALENDAR */
-        .widget-card {
-            background: var(--card);
-            border-radius: var(--radius);
-            padding: 14px 16px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-            transition: background var(--transition), border var(--transition);
-            margin-bottom: 14px;
-        }
-        .widget-card h4 {
+        .calendar-widget h4 {
             font-size: 0.85rem;
             font-weight: 600;
             margin-bottom: 10px;
@@ -801,11 +948,10 @@
             align-items: center;
             gap: 8px;
         }
-        .widget-card h4 i {
-            color: var(--primary);
+        .calendar-widget h4 i {
+            color: var(--accent);
         }
-
-        .mini-calendar .cal-header {
+        .calendar-widget .cal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -813,7 +959,7 @@
             font-weight: 600;
             font-size: 0.85rem;
         }
-        .mini-calendar .cal-header button {
+        .calendar-widget .cal-header button {
             background: none;
             border: none;
             font-size: 0.9rem;
@@ -823,41 +969,89 @@
             transition: background 0.2s;
             cursor: pointer;
         }
-        .mini-calendar .cal-header button:hover {
+        .calendar-widget .cal-header button:hover {
             background: var(--border);
         }
-        .mini-calendar .cal-grid {
+        .calendar-widget .cal-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 3px;
+            gap: 2px;
             text-align: center;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
         }
-        .mini-calendar .cal-grid .cal-day {
+        .calendar-widget .cal-grid .cal-day {
             padding: 4px 0;
             border-radius: 6px;
             font-weight: 500;
             color: var(--text-secondary);
+            font-size: 0.7rem;
         }
-        .mini-calendar .cal-grid .cal-day.weekend {
+        .calendar-widget .cal-grid .cal-day.weekend {
             color: var(--danger);
             opacity: 0.4;
         }
-        .mini-calendar .cal-grid .cal-day.today {
-            background: var(--primary);
+        .calendar-widget .cal-grid .cal-day.today {
+            background: var(--accent);
             color: #fff;
             font-weight: 600;
             border-radius: 50%;
-            width: 28px;
+            width: 26px;
             margin: 0 auto;
-            line-height: 28px;
+            line-height: 26px;
             padding: 0;
         }
-        .mini-calendar .cal-grid .cal-day.other {
+        .calendar-widget .cal-grid .cal-day.other {
             opacity: 0.25;
         }
+        .calendar-widget .cal-grid .cal-day.holiday {
+            color: #EF4444;
+            font-weight: 600;
+            position: relative;
+        }
+        .calendar-widget .cal-grid .cal-day.holiday::after {
+            content: '🎉';
+            font-size: 0.5rem;
+            position: absolute;
+            top: -2px;
+            right: -2px;
+        }
+        .calendar-widget .cal-grid .cal-day.closed {
+            color: #EF4444;
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+        .calendar-widget .holiday-list {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border);
+        }
+        .calendar-widget .holiday-list .holiday-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            padding: 2px 0;
+            color: var(--text-secondary);
+        }
+        .calendar-widget .holiday-list .holiday-item .h-date {
+            font-weight: 600;
+            color: var(--text);
+        }
+        .calendar-widget .school-days-info {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0 0;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border);
+            margin-top: 8px;
+        }
+        .calendar-widget .school-days-info span strong {
+            color: var(--text);
+        }
 
-        /* STUDENTS */
+        /* ============================================================
+                   STUDENTS - TABLE
+                   ============================================================ */
         .page-toolbar {
             display: flex;
             flex-wrap: wrap;
@@ -877,8 +1071,8 @@
             transition: border var(--transition), box-shadow var(--transition);
         }
         .page-toolbar .search-box:focus-within {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.06);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(201, 168, 76, 0.06);
         }
         .page-toolbar .search-box i {
             color: var(--text-secondary);
@@ -910,7 +1104,7 @@
             max-width: 120px;
         }
         .page-toolbar .filter-group select:focus {
-            border-color: var(--primary);
+            border-color: var(--accent);
         }
 
         .btn-success {
@@ -919,11 +1113,11 @@
             gap: 6px;
             padding: 8px 16px;
             border-radius: var(--radius-sm);
-            background: var(--success);
+            background: #22C55E;
             color: #fff;
             font-weight: 600;
             font-size: 0.8rem;
-            transition: background 0.2s, transform 0.15s;
+            transition: all 0.2s;
             box-shadow: 0 3px 12px rgba(34, 197, 94, 0.2);
             white-space: nowrap;
         }
@@ -949,21 +1143,22 @@
             background: transparent;
         }
         .btn-outline:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-            background: rgba(37, 99, 235, 0.04);
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(201, 168, 76, 0.04);
         }
+
         .btn-danger {
             display: inline-flex;
             align-items: center;
             gap: 6px;
             padding: 8px 16px;
             border-radius: var(--radius-sm);
-            background: var(--danger);
+            background: #EF4444;
             color: #fff;
             font-weight: 600;
             font-size: 0.8rem;
-            transition: background 0.2s, transform 0.15s;
+            transition: all 0.2s;
             box-shadow: 0 3px 12px rgba(239, 68, 68, 0.2);
         }
         .btn-danger:hover {
@@ -973,9 +1168,28 @@
         .btn-danger:active {
             transform: scale(0.96);
         }
+
         .btn-sm {
-            padding: 5px 12px;
+            padding: 4px 10px;
             font-size: 0.7rem;
+        }
+        .btn-gold {
+            background: var(--accent);
+            color: #0A1628;
+            font-weight: 700;
+            padding: 8px 18px;
+            border-radius: var(--radius-sm);
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+            border: none;
+        }
+        .btn-gold:hover {
+            background: var(--accent-light);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(201, 168, 76, 0.3);
         }
 
         .table-wrap {
@@ -1030,13 +1244,13 @@
             cursor: pointer;
         }
         table .actions-cell button:hover {
-            background: var(--primary);
+            background: var(--accent);
             color: #fff;
-            border-color: var(--primary);
+            border-color: var(--accent);
         }
         table .actions-cell button.danger:hover {
-            background: var(--danger);
-            border-color: var(--danger);
+            background: #EF4444;
+            border-color: #EF4444;
         }
         .empty-state {
             text-align: center;
@@ -1054,11 +1268,10 @@
             color: var(--text);
             font-size: 1rem;
         }
-        .empty-state p {
-            font-size: 0.85rem;
-        }
 
-        /* ATTENDANCE */
+        /* ============================================================
+                   ATTENDANCE - ENHANCED UI
+                   ============================================================ */
         .attendance-controls {
             display: flex;
             flex-wrap: wrap;
@@ -1097,7 +1310,7 @@
         }
         .attendance-controls .form-group select:focus,
         .attendance-controls .form-group input:focus {
-            border-color: var(--primary);
+            border-color: var(--accent);
             outline: none;
         }
         .attendance-controls .form-group .btn-group {
@@ -1117,8 +1330,8 @@
             cursor: pointer;
         }
         .attendance-controls .form-group .btn-group button:hover {
-            border-color: var(--primary);
-            color: var(--primary);
+            border-color: var(--accent);
+            color: var(--accent);
         }
 
         .attendance-student-item {
@@ -1132,7 +1345,7 @@
             flex-wrap: wrap;
         }
         .attendance-student-item:hover {
-            background: rgba(37, 99, 235, 0.02);
+            background: rgba(201, 168, 76, 0.03);
         }
         .attendance-student-item .stu-info {
             display: flex;
@@ -1142,16 +1355,16 @@
             min-width: 120px;
         }
         .attendance-student-item .stu-info .stu-avatar {
-            width: 30px;
-            height: 30px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
-            background: var(--primary);
+            background: var(--accent);
             color: #fff;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 600;
-            font-size: 0.7rem;
+            font-weight: 700;
+            font-size: 0.8rem;
             flex-shrink: 0;
         }
         .attendance-student-item .stu-info .stu-name {
@@ -1164,286 +1377,459 @@
         }
         .attendance-student-item .stu-actions {
             display: flex;
-            gap: 4px;
+            gap: 6px;
         }
         .attendance-student-item .stu-actions button {
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-weight: 600;
-            font-size: 0.7rem;
+            padding: 6px 14px;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            font-size: 0.8rem;
             border: 2px solid var(--border);
             background: var(--bg);
             color: var(--text-secondary);
             transition: all 0.2s;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            min-width: 44px;
+            justify-content: center;
         }
         .attendance-student-item .stu-actions button:hover {
-            border-color: var(--primary);
-            color: var(--primary);
+            border-color: var(--accent);
+            color: var(--accent);
         }
         .attendance-student-item .stu-actions button.present {
-            background: var(--success);
+            background: #22C55E;
             color: #fff;
-            border-color: var(--success);
+            border-color: #22C55E;
+        }
+        .attendance-student-item .stu-actions button.present:hover {
+            background: #16A34A;
         }
         .attendance-student-item .stu-actions button.absent {
-            background: var(--danger);
+            background: #EF4444;
             color: #fff;
-            border-color: var(--danger);
+            border-color: #EF4444;
+        }
+        .attendance-student-item .stu-actions button.absent:hover {
+            background: #DC2626;
         }
         .attendance-student-item .stu-actions button.leave {
-            background: var(--warning);
+            background: #F59E0B;
             color: #fff;
-            border-color: var(--warning);
+            border-color: #F59E0B;
+        }
+        .attendance-student-item .stu-actions button.leave:hover {
+            background: #D97706;
+        }
+        .attendance-student-item .stu-actions button i {
+            font-size: 0.9rem;
         }
 
-        /* REPORTS */
-        .report-filters {
+        /* ============================================================
+                   ID CARD MODAL - PROFESSIONAL DESIGN
+                   ============================================================ */
+        .idcard-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 4000;
+            padding: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+        .idcard-overlay.open {
             display: flex;
-            flex-wrap: wrap;
+        }
+        .idcard-container {
+            max-width: 960px;
+            width: 100%;
+            max-height: 95vh;
+            overflow-y: auto;
+            animation: scaleUp 0.4s ease;
+            padding: 10px;
+        }
+        .idcard-actions {
+            display: flex;
             gap: 10px;
-            align-items: flex-end;
-            margin-bottom: 14px;
+            justify-content: flex-end;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        .idcard-actions button {
+            padding: 8px 20px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
             background: var(--card);
-            padding: 14px 16px;
-            border-radius: var(--radius);
+            color: var(--text);
             border: 1px solid var(--border);
             box-shadow: var(--shadow);
         }
-        .report-filters .form-group {
-            flex: 1;
-            min-width: 100px;
+        .idcard-actions button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
         }
-        .report-filters .form-group label {
-            display: block;
-            font-size: 0.65rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.4px;
-            color: var(--text-secondary);
-            margin-bottom: 3px;
+        .idcard-actions button.btn-print {
+            background: var(--accent);
+            color: #0A1628;
+            border-color: var(--accent);
         }
-        .report-filters .form-group select,
-        .report-filters .form-group input {
-            width: 100%;
-            padding: 8px 10px;
-            border-radius: var(--radius-sm);
-            border: 2px solid var(--border);
-            background: var(--bg);
-            color: var(--text);
-            font-size: 0.85rem;
-            transition: border var(--transition);
+        .idcard-actions button.btn-pdf {
+            background: #0A1628;
+            color: #fff;
+            border-color: #0A1628;
         }
-        .report-filters .form-group select:focus,
-        .report-filters .form-group input:focus {
-            border-color: var(--primary);
-        }
-        .report-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 14px;
+        .idcard-actions button.btn-close {
+            background: #EF4444;
+            color: #fff;
+            border-color: #EF4444;
         }
 
-        .report-summary {
-            background: var(--card);
-            border-radius: var(--radius);
-            border: 1px solid var(--border);
-            padding: 14px 18px;
-            margin-bottom: 14px;
+        /* ===== THE ID CARD ITSELF ===== */
+        .id-card {
+            background: #FFFFFF;
+            border-radius: var(--radius-lg);
+            padding: 0;
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Card Header - Navy with Gold */
+        .id-card .card-header {
+            background: #0A1628;
+            padding: 20px 28px;
             display: flex;
-            flex-wrap: wrap;
-            gap: 16px;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            border-bottom: 3px solid var(--accent);
         }
-        .report-summary .stat-item {
-            text-align: center;
-        }
-        .report-summary .stat-item .num {
-            font-size: 1.2rem;
-            font-weight: 700;
-        }
-        .report-summary .stat-item .label {
-            font-size: 0.65rem;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
-        .report-summary .stat-item .num.green {
-            color: var(--success);
-        }
-        .report-summary .stat-item .num.red {
-            color: var(--danger);
-        }
-        .report-summary .stat-item .num.orange {
-            color: var(--warning);
-        }
-        .report-summary .stat-item .num.blue {
-            color: var(--primary);
-        }
-
-        /* PROFILE */
-        .profile-header {
+        .id-card .card-header .school-info {
             display: flex;
             align-items: center;
             gap: 16px;
-            padding: 16px 20px;
-            background: var(--card);
-            border-radius: var(--radius);
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow);
-            margin-bottom: 16px;
-            flex-wrap: wrap;
         }
-        .profile-header .profile-avatar {
-            width: 64px;
-            height: 64px;
+        .id-card .card-header .school-info .emblem {
+            width: 56px;
+            height: 56px;
             border-radius: 50%;
-            background: var(--primary);
-            color: #fff;
+            background: var(--accent);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
-            font-weight: 700;
+            color: #0A1628;
+            font-size: 1.6rem;
+            font-weight: 800;
             flex-shrink: 0;
+            border: 2px solid var(--accent-light);
         }
-        .profile-header .profile-info h2 {
-            font-size: 1.15rem;
+        .id-card .card-header .school-info .school-name {
+            color: #fff;
+        }
+        .id-card .card-header .school-info .school-name h1 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: -0.3px;
+            margin: 0;
+            line-height: 1.2;
+        }
+        .id-card .card-header .school-info .school-name h1 span {
+            color: var(--accent);
+        }
+        .id-card .card-header .school-info .school-name .address {
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 400;
+            margin-top: 2px;
+        }
+        .id-card .card-header .card-title {
+            text-align: right;
+            color: #fff;
+        }
+        .id-card .card-header .card-title h2 {
+            font-size: 1.1rem;
             font-weight: 700;
+            letter-spacing: 0.5px;
+            color: var(--accent);
+            margin: 0;
+            line-height: 1.2;
         }
-        .profile-header .profile-info p {
-            color: var(--text-secondary);
-            font-size: 0.85rem;
-        }
-        .profile-header .profile-info .badge {
-            display: inline-block;
-            padding: 2px 12px;
-            border-radius: 20px;
-            background: rgba(37, 99, 235, 0.10);
-            color: var(--primary);
+        .id-card .card-header .card-title .motto {
             font-size: 0.65rem;
-            font-weight: 600;
-            margin-top: 4px;
+            color: rgba(255, 255, 255, 0.4);
+            font-style: italic;
+            letter-spacing: 0.3px;
         }
 
-        .profile-stats {
+        /* Card Body */
+        .id-card .card-body {
+            padding: 24px 28px 20px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 10px;
-            margin-bottom: 16px;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            background: #fff;
         }
-        .profile-stats .stat-item {
-            background: var(--card);
-            padding: 12px 14px;
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--border);
-            text-align: center;
+        /* Left Column - Student Info */
+        .id-card .card-body .left-col {
+            border-right: 1px solid #E8ECF0;
+            padding-right: 24px;
         }
-        .profile-stats .stat-item .num {
-            font-size: 1.2rem;
+        .id-card .card-body .left-col .student-name {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #0A1628;
+            margin-bottom: 4px;
+            letter-spacing: -0.3px;
+        }
+        .id-card .card-body .left-col .student-id-label {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+        .id-card .card-body .left-col .student-id-number {
+            font-size: 1.1rem;
             font-weight: 700;
+            color: #0A1628;
+            letter-spacing: 1px;
         }
-        .profile-stats .stat-item .label {
+
+        .id-card .card-body .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px 16px;
+            margin-top: 12px;
+        }
+        .id-card .card-body .info-grid .info-item {
+            font-size: 0.78rem;
+            padding: 4px 0;
+            border-bottom: 1px solid #F0F2F5;
+        }
+        .id-card .card-body .info-grid .info-item .label {
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            display: block;
+        }
+        .id-card .card-body .info-grid .info-item .value {
+            color: var(--text);
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-top: 1px;
+        }
+        .id-card .card-body .info-grid .info-item .value i {
+            color: var(--accent);
+            font-size: 0.7rem;
+            margin-right: 4px;
+            opacity: 0.6;
+        }
+
+        /* Right Column - Attendance Summary */
+        .id-card .card-body .right-col {
+            padding-left: 4px;
+        }
+        .id-card .card-body .right-col .att-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 6px;
+            display: inline-block;
+        }
+
+        .id-card .card-body .att-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+        .id-card .card-body .att-stats .att-stat {
+            background: #F8FAFC;
+            border-radius: var(--radius-sm);
+            padding: 12px 10px;
+            text-align: center;
+            border: 1px solid #E8ECF0;
+            transition: all 0.2s;
+        }
+        .id-card .card-body .att-stats .att-stat .number {
+            font-size: 1.6rem;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+        .id-card .card-body .att-stats .att-stat .number.green {
+            color: #22C55E;
+        }
+        .id-card .card-body .att-stats .att-stat .number.red {
+            color: #EF4444;
+        }
+        .id-card .card-body .att-stats .att-stat .number.gold {
+            color: var(--accent);
+        }
+        .id-card .card-body .att-stats .att-stat .label {
             font-size: 0.6rem;
             color: var(--text-secondary);
             text-transform: uppercase;
+            font-weight: 600;
             letter-spacing: 0.3px;
+            margin-top: 2px;
+        }
+        .id-card .card-body .att-stats .att-stat .icon {
+            font-size: 0.9rem;
+            display: block;
+            margin-bottom: 2px;
         }
 
-        /* SETTINGS */
-        .settings-group {
-            background: var(--card);
-            border-radius: var(--radius);
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow);
-            padding: 16px 18px;
-            margin-bottom: 14px;
+        .id-card .card-body .att-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px 16px;
+            background: #F8FAFC;
+            border-radius: var(--radius-sm);
+            padding: 12px 16px;
+            border: 1px solid #E8ECF0;
+            margin-top: 4px;
         }
-        .settings-group h4 {
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-bottom: 12px;
+        .id-card .card-body .att-details .att-detail {
+            font-size: 0.75rem;
             display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .settings-group h4 i {
-            color: var(--primary);
-        }
-        .settings-row {
-            display: flex;
-            align-items: center;
             justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid var(--border);
-            flex-wrap: wrap;
-            gap: 8px;
+            padding: 2px 0;
+            border-bottom: 1px solid #E8ECF0;
         }
-        .settings-row:last-child {
+        .id-card .card-body .att-details .att-detail:last-child {
             border-bottom: none;
         }
-        .settings-row .label {
+        .id-card .card-body .att-details .att-detail .label {
+            color: var(--text-secondary);
             font-weight: 500;
-            font-size: 0.85rem;
         }
-        .settings-row .desc {
+        .id-card .card-body .att-details .att-detail .value {
+            font-weight: 600;
+            color: var(--text);
+        }
+        .id-card .card-body .att-details .att-detail .value.excellent {
+            color: #22C55E;
+        }
+        .id-card .card-body .att-details .att-detail .value.good {
+            color: #22C55E;
+        }
+        .id-card .card-body .att-details .att-detail .value.average {
+            color: #F59E0B;
+        }
+        .id-card .card-body .att-details .att-detail .value.needs-improvement {
+            color: #EF4444;
+        }
+
+        /* Student ID Panel - Compact */
+        .id-card .card-body .id-panel {
+            margin-top: 12px;
+            padding: 10px 14px;
+            background: #F0F4F8;
+            border-radius: var(--radius-sm);
+            border: 1px solid #E8ECF0;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .id-card .card-body .id-panel .id-label {
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            letter-spacing: 0.5px;
+        }
+        .id-card .card-body .id-panel .id-number {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #0A1628;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 1px;
+        }
+        .id-card .card-body .id-panel .barcode-wrap {
+            margin-left: auto;
+            min-width: 120px;
+            max-width: 160px;
+        }
+        .id-card .card-body .id-panel .barcode-wrap svg {
+            width: 100%;
+            height: auto;
+        }
+
+        /* Footer */
+        .id-card .card-footer {
+            background: #F8FAFC;
+            padding: 14px 28px;
+            border-top: 1px solid #E8ECF0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .id-card .card-footer .footer-note {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+        .id-card .card-footer .signatures {
+            display: flex;
+            gap: 32px;
             font-size: 0.7rem;
             color: var(--text-secondary);
         }
-
-        .toggle-switch {
-            width: 42px;
-            height: 24px;
-            background: var(--border);
-            border-radius: 20px;
-            position: relative;
-            cursor: pointer;
-            transition: background 0.3s;
-            flex-shrink: 0;
+        .id-card .card-footer .signatures .sig-line {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-        .toggle-switch.active {
-            background: var(--primary);
+        .id-card .card-footer .signatures .sig-line .line {
+            width: 80px;
+            border-bottom: 2px solid #0A1628;
+            margin-bottom: 2px;
+            height: 20px;
         }
-        .toggle-switch::after {
-            content: '';
-            position: absolute;
-            width: 18px;
-            height: 18px;
+        .id-card .card-footer .signatures .sig-line .label {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            color: var(--text-secondary);
+        }
+        .id-card .card-footer .qr-wrap {
+            width: 48px;
+            height: 48px;
             background: #fff;
-            border-radius: 50%;
-            top: 3px;
-            left: 3px;
-            transition: transform 0.3s;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-        }
-        .toggle-switch.active::after {
-            transform: translateX(18px);
-        }
-
-        .logout-btn {
+            border-radius: 4px;
+            border: 1px solid #E8ECF0;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            width: 100%;
-            padding: 12px;
-            border-radius: var(--radius-sm);
-            background: rgba(239, 68, 68, 0.08);
-            color: var(--danger);
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: background 0.2s;
-            border: 2px solid transparent;
-            margin-top: 6px;
-        }
-        .logout-btn:hover {
-            background: rgba(239, 68, 68, 0.15);
-            border-color: var(--danger);
+            color: #0A1628;
+            font-size: 1.8rem;
         }
 
-        /* MODALS */
+        /* ============================================================
+                   MODALS (Generic)
+                   ============================================================ */
         .modal-overlay {
             position: fixed;
             inset: 0;
@@ -1468,27 +1854,27 @@
                 opacity: 1;
             }
         }
-        .modal-box {
-            background: var(--card);
-            border-radius: var(--radius);
-            max-width: 480px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            padding: 24px 22px;
-            box-shadow: var(--shadow-hover);
-            animation: scaleUp 0.3s ease;
-            border: 1px solid var(--border);
-        }
         @keyframes scaleUp {
             from {
-                transform: scale(0.92);
+                transform: scale(0.94);
                 opacity: 0;
             }
             to {
                 transform: scale(1);
                 opacity: 1;
             }
+        }
+        .modal-box {
+            background: var(--card);
+            border-radius: var(--radius-lg);
+            max-width: 520px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 28px 24px;
+            box-shadow: var(--shadow-hover);
+            animation: scaleUp 0.3s ease;
+            border: 1px solid var(--border);
         }
         .modal-box .modal-header {
             display: flex;
@@ -1499,6 +1885,12 @@
         .modal-box .modal-header h3 {
             font-size: 1.05rem;
             font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .modal-box .modal-header h3 i {
+            color: var(--accent);
         }
         .modal-box .modal-header .close-modal {
             font-size: 1.2rem;
@@ -1522,6 +1914,8 @@
             font-weight: 600;
             margin-bottom: 3px;
             color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
         }
         .modal-box .form-group input,
         .modal-box .form-group select,
@@ -1538,7 +1932,7 @@
         .modal-box .form-group input:focus,
         .modal-box .form-group select:focus,
         .modal-box .form-group textarea:focus {
-            border-color: var(--primary);
+            border-color: var(--accent);
             outline: none;
         }
         .modal-box .form-group textarea {
@@ -1578,12 +1972,12 @@
         }
 
         .confirm-dialog .modal-box {
-            max-width: 360px;
+            max-width: 380px;
             text-align: center;
         }
         .confirm-dialog .modal-box .confirm-icon {
             font-size: 2.6rem;
-            color: var(--warning);
+            color: #F59E0B;
             margin-bottom: 10px;
         }
         .confirm-dialog .modal-box .confirm-actions {
@@ -1593,7 +1987,9 @@
             margin-top: 16px;
         }
 
-        /* RESPONSIVE */
+        /* ============================================================
+                   RESPONSIVE
+                   ============================================================ */
         @media (min-width: 768px) {
             .page-content {
                 padding: 24px 32px 16px;
@@ -1602,33 +1998,26 @@
                 grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
                 gap: 16px;
             }
-            .charts-row {
-                grid-template-columns: 2fr 1fr;
-                gap: 16px;
-            }
-            .chart-card .chart-wrap {
-                height: 180px;
-            }
             .app-header {
                 padding: 0 32px;
-            }
-            .app-header .header-left h2 {
-                font-size: 1.2rem;
-            }
-            .attendance-controls .form-group {
-                min-width: 140px;
-            }
-            .report-filters .form-group {
-                min-width: 140px;
-            }
-            .profile-header {
-                padding: 20px 28px;
             }
             .bottom-nav {
                 display: flex !important;
             }
             body {
                 padding-bottom: var(--bottom-nav-height);
+            }
+            .id-card .card-body {
+                padding: 28px 32px 24px;
+            }
+            .id-card .card-header {
+                padding: 24px 32px;
+            }
+            .id-card .card-body .info-grid {
+                gap: 8px 20px;
+            }
+            .id-card .card-body .att-stats .att-stat .number {
+                font-size: 2rem;
             }
         }
 
@@ -1646,157 +2035,226 @@
             .stat-card .stat-value {
                 font-size: 1.2rem;
             }
-            .stat-card .stat-icon {
-                font-size: 1.2rem;
-                right: 8px;
-                bottom: 8px;
+            .bottom-nav {
+                display: flex !important;
             }
-            .charts-row {
+            .login-card {
+                padding: 32px 20px;
+            }
+            .id-card .card-body {
                 grid-template-columns: 1fr;
-                gap: 10px;
+                gap: 16px;
+                padding: 16px;
             }
-            .chart-card .chart-wrap {
-                height: 120px;
+            .id-card .card-body .left-col {
+                border-right: none;
+                padding-right: 0;
             }
-            .chart-card {
-                padding: 12px 14px;
-            }
-            .widget-card {
-                padding: 12px 14px;
-            }
-            .profile-header {
-                padding: 14px 16px;
+            .id-card .card-header {
+                padding: 16px;
                 flex-direction: column;
                 text-align: center;
             }
+            .id-card .card-header .school-info {
+                flex-direction: column;
+            }
+            .id-card .card-header .card-title {
+                text-align: center;
+            }
+            .id-card .card-body .info-grid {
+                grid-template-columns: 1fr;
+                gap: 4px;
+            }
+            .id-card .card-body .att-stats {
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 6px;
+            }
+            .id-card .card-body .att-stats .att-stat .number {
+                font-size: 1.2rem;
+            }
+            .id-card .card-body .id-panel {
+                flex-wrap: wrap;
+            }
+            .id-card .card-body .id-panel .barcode-wrap {
+                margin-left: 0;
+                min-width: 100px;
+            }
+            .id-card .card-footer {
+                flex-direction: column;
+                text-align: center;
+                padding: 12px 16px;
+            }
+            .id-card .card-footer .signatures {
+                gap: 16px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .id-card-actions {
+                justify-content: center;
+            }
+            .id-card-actions button {
+                font-size: 0.7rem;
+                padding: 6px 14px;
+            }
             .modal-box {
-                padding: 18px 16px;
+                padding: 20px 16px;
             }
             .modal-box .form-row {
                 grid-template-columns: 1fr;
             }
-            .attendance-controls {
-                padding: 12px 14px;
+            .dash-welcome {
+                flex-direction: column;
+                text-align: center;
             }
-            .attendance-controls .form-group {
-                min-width: 80px;
+            .setup-box {
+                padding: 24px 18px;
             }
-            .report-filters {
-                padding: 12px 14px;
-            }
-            .report-filters .form-group {
-                min-width: 80px;
-            }
-            .attendance-student-item {
-                padding: 8px 10px;
-            }
-            .attendance-student-item .stu-info .stu-name {
-                font-size: 0.8rem;
-            }
-            .attendance-student-item .stu-actions button {
-                padding: 3px 8px;
-                font-size: 0.65rem;
-            }
-            .page-toolbar .search-box {
-                min-width: 120px;
-            }
-            .page-toolbar .filter-group select {
-                max-width: 100px;
-                font-size: 0.75rem;
-                padding: 6px 10px;
-            }
-            .btn-success {
-                padding: 6px 12px;
-                font-size: 0.75rem;
-            }
-            .report-summary {
-                padding: 10px 14px;
-                gap: 10px;
-            }
-            .report-summary .stat-item .num {
-                font-size: 1rem;
-            }
-            .login-card {
-                padding: 30px 20px;
-            }
-            .login-brand .logo-icon {
-                width: 52px;
-                height: 52px;
-                font-size: 2rem;
-            }
-            .login-brand h1 {
-                font-size: 1.3rem;
-            }
-            table {
-                font-size: 0.7rem;
-                min-width: 400px;
-            }
-            table th,
-            table td {
-                padding: 6px 10px;
-            }
-            .bottom-nav {
-                display: flex !important;
-            }
-        }
-
-        @media (max-width: 400px) {
-            .stats-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 6px;
-            }
-            .stat-card {
-                padding: 10px 12px;
-            }
-            .stat-card .stat-value {
-                font-size: 1rem;
-            }
-            .stat-card .stat-label {
-                font-size: 0.6rem;
-            }
-            .bottom-nav .nav-item i {
-                font-size: 1.1rem;
-            }
-            .bottom-nav .nav-item span {
-                font-size: 0.5rem;
-            }
-            .app-header .header-left h2 {
-                font-size: 0.9rem;
-            }
-            .app-header .header-right .user-badge span {
-                display: none;
+            .status-box {
+                padding: 24px 18px;
             }
         }
 
         @media print {
             .bottom-nav,
             .app-header,
-            .report-actions,
             .page-toolbar .btn-success,
-            .page-toolbar .filter-group {
+            .page-toolbar .filter-group,
+            .idcard-actions {
                 display: none !important;
             }
             body {
                 padding-bottom: 0 !important;
+                background: #fff !important;
             }
-            .page-content {
-                padding: 16px !important;
+            .idcard-overlay {
+                position: static !important;
+                background: #fff !important;
+                backdrop-filter: none !important;
+                padding: 0 !important;
+                display: flex !important;
             }
-            .stat-card,
-            .chart-card,
-            .widget-card {
+            .idcard-container {
+                max-height: none !important;
+                overflow: visible !important;
+                padding: 0 !important;
+            }
+            .id-card {
                 box-shadow: none !important;
                 border: 1px solid #ddd !important;
+                border-radius: 8px !important;
             }
-            .table-wrap {
-                border: 1px solid #ddd !important;
+            .id-card .card-header {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                background: #0A1628 !important;
             }
-            .page-section {
-                display: block !important;
+            .id-card .card-body .att-stats .att-stat {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
             }
-            .report-summary {
-                border: 1px solid #ddd !important;
+            .id-card .card-footer {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                background: #F8FAFC !important;
             }
+            .id-card .card-body .id-panel {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                background: #F0F4F8 !important;
+            }
+        }
+
+        /* ============================================================
+                   PROFILE & SETTINGS
+                   ============================================================ */
+        .settings-group {
+            background: var(--card);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            padding: 16px 18px;
+            margin-bottom: 14px;
+        }
+        .settings-group h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .settings-group h4 i {
+            color: var(--accent);
+        }
+        .settings-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .settings-row:last-child {
+            border-bottom: none;
+        }
+        .settings-row .label {
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+        .settings-row .desc {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+        }
+
+        .toggle-switch {
+            width: 42px;
+            height: 24px;
+            background: var(--border);
+            border-radius: 20px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.3s;
+            flex-shrink: 0;
+        }
+        .toggle-switch.active {
+            background: var(--accent);
+        }
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            background: #fff;
+            border-radius: 50%;
+            top: 3px;
+            left: 3px;
+            transition: transform 0.3s;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        }
+        .toggle-switch.active::after {
+            transform: translateX(18px);
+        }
+
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 12px;
+            border-radius: var(--radius-sm);
+            background: rgba(239, 68, 68, 0.08);
+            color: #EF4444;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+            border: 2px solid transparent;
+            margin-top: 6px;
+        }
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: #EF4444;
         }
     </style>
 </head>
@@ -1818,18 +2276,18 @@
             <div class="login-brand">
                 <div class="logo-icon"><i class="fas fa-graduation-cap"></i></div>
                 <h1>Attendix<span>.</span></h1>
-                <p>Smart Attendance Management</p>
+                <p>Premium School Management</p>
             </div>
             <form class="login-form" id="loginForm" autocomplete="off">
                 <div class="form-group">
-                    <label><i class="fas fa-envelope" style="margin-right:4px;"></i> Email</label>
+                    <label>Email</label>
                     <div class="input-wrap">
                         <i class="fas fa-envelope"></i>
                         <input type="email" id="loginEmail" placeholder="teacher@school.com" value="demo@attendix.com" required />
                     </div>
                 </div>
                 <div class="form-group">
-                    <label><i class="fas fa-lock" style="margin-right:4px;"></i> Password</label>
+                    <label>Password</label>
                     <div class="input-wrap">
                         <i class="fas fa-lock"></i>
                         <input type="password" id="loginPassword" placeholder="••••••••" value="password123" required />
@@ -1861,6 +2319,62 @@
     </div>
 
     <!-- ============================================================
+    SETUP MODAL (First Time Login)
+    ============================================================ -->
+    <div class="setup-overlay" id="setupModal">
+        <div class="setup-box">
+            <h2><i class="fas fa-school"></i> School Setup</h2>
+            <p>Welcome! Please enter your school details to get started.</p>
+            <form id="setupForm">
+                <div class="form-group">
+                    <label>School Name</label>
+                    <input type="text" id="setupSchoolName" placeholder="e.g. Delhi Public School" required />
+                </div>
+                <div class="form-group">
+                    <label>School Address</label>
+                    <input type="text" id="setupSchoolAddress" placeholder="Full address" />
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Principal Name</label>
+                        <input type="text" id="setupPrincipal" placeholder="Principal's name" />
+                    </div>
+                    <div class="form-group">
+                        <label>Class Teacher</label>
+                        <input type="text" id="setupClassTeacher" placeholder="Your name" value="Teacher" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>School Motto</label>
+                    <input type="text" id="setupMotto" placeholder="e.g. Excellence in Education" />
+                </div>
+                <div class="form-group">
+                    <label>Academic Year</label>
+                    <input type="text" id="setupAcademicYear" placeholder="e.g. 2025-2026" />
+                </div>
+                <div class="setup-actions">
+                    <button type="submit" class="btn-primary"><i class="fas fa-save"></i> Save & Continue</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    SCHOOL STATUS MODAL
+    ============================================================ -->
+    <div class="status-overlay" id="statusModal">
+        <div class="status-box">
+            <div class="status-icon"><i class="fas fa-building"></i></div>
+            <h2>Is School Open Today?</h2>
+            <p>Please confirm the school status for today's attendance.</p>
+            <div class="status-buttons">
+                <button class="btn-open" id="statusOpen"><i class="fas fa-check-circle"></i> Open</button>
+                <button class="btn-closed" id="statusClosed"><i class="fas fa-times-circle"></i> Closed</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
     APP
     ============================================================ -->
     <div id="app">
@@ -1883,64 +2397,64 @@
         <!-- PAGE CONTENT -->
         <div class="page-content" id="pageContent">
 
-            <!-- DASHBOARD -->
+            <!-- ===== DASHBOARD ===== -->
             <section class="page-section active" id="page-dashboard">
-                <div class="stats-grid" id="dashStats">
+                <div class="dash-welcome">
+                    <div>
+                        <h3 id="dashSchoolName">📚 School Name <small id="dashTeacherName">- Teacher</small></h3>
+                        <div style="font-size:0.8rem;color:var(--text-secondary);" id="dashSchoolAddress"></div>
+                    </div>
+                    <div>
+                        <span class="school-status-badge" id="schoolStatusBadge">● Open</span>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-icon"><i class="fas fa-users"></i></div>
                         <div class="stat-label">Total Students</div>
                         <div class="stat-value" id="statTotal">0</div>
-                        <div class="stat-change"><i class="fas fa-arrow-up"></i> Enrolled</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon"><i class="fas fa-check-circle" style="color:var(--success);"></i></div>
+                        <div class="stat-icon"><i class="fas fa-check-circle" style="color:#22C55E;"></i></div>
                         <div class="stat-label">Present Today</div>
                         <div class="stat-value" id="statPresent">0</div>
-                        <div class="stat-change"><i class="fas fa-arrow-up"></i> Today</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon"><i class="fas fa-times-circle" style="color:var(--danger);"></i></div>
+                        <div class="stat-icon"><i class="fas fa-times-circle" style="color:#EF4444;"></i></div>
                         <div class="stat-label">Absent Today</div>
                         <div class="stat-value" id="statAbsent">0</div>
-                        <div class="stat-change down"><i class="fas fa-arrow-down"></i> Today</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon"><i class="fas fa-clock" style="color:var(--warning);"></i></div>
+                        <div class="stat-icon"><i class="fas fa-clock" style="color:#F59E0B;"></i></div>
                         <div class="stat-label">On Leave</div>
                         <div class="stat-value" id="statLeave">0</div>
-                        <div class="stat-change"><i class="fas fa-minus"></i> Today</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon"><i class="fas fa-percent" style="color:var(--primary);"></i></div>
+                        <div class="stat-icon"><i class="fas fa-percent" style="color:var(--accent);"></i></div>
                         <div class="stat-label">Attendance %</div>
                         <div class="stat-value" id="statPercent">0%</div>
-                        <div class="stat-change"><i class="fas fa-arrow-up"></i> Overall</div>
                     </div>
                 </div>
 
-                <div class="charts-row">
-                    <div class="chart-card">
-                        <h4><i class="fas fa-chart-line" style="color:var(--primary);"></i> Monthly Trend</h4>
-                        <div class="chart-wrap"><canvas id="monthlyChart"></canvas></div>
+                <!-- Calendar with Holidays -->
+                <div class="calendar-widget">
+                    <h4><i class="fas fa-calendar-alt"></i> Calendar <span style="font-weight:400;font-size:0.7rem;color:var(--text-secondary);">— Indian Holidays &amp; Festivals</span></h4>
+                    <div id="miniCalendar"></div>
+                    <div class="holiday-list" id="holidayList"></div>
+                    <div class="school-days-info" id="schoolDaysInfo">
+                        <span>📅 <strong id="monthOpenDays">0</strong> days open this month</span>
+                        <span>🏫 <strong id="totalWorkingDays">0</strong> total working days</span>
                     </div>
-                    <div class="chart-card">
-                        <h4><i class="fas fa-chart-pie" style="color:var(--primary);"></i> Present vs Absent</h4>
-                        <div class="chart-wrap"><canvas id="pieChart"></canvas></div>
-                    </div>
-                </div>
-
-                <div class="widget-card">
-                    <h4><i class="fas fa-calendar-alt"></i> Calendar</h4>
-                    <div class="mini-calendar" id="miniCalendar"></div>
                 </div>
             </section>
 
-            <!-- STUDENTS -->
+            <!-- ===== STUDENTS ===== -->
             <section class="page-section" id="page-students">
                 <div class="page-toolbar">
                     <div class="search-box">
                         <i class="fas fa-search"></i>
-                        <input type="text" id="studentSearch" placeholder="Search students..." />
+                        <input type="text" id="studentSearch" placeholder="Search by name, ID, roll..." />
                     </div>
                     <div class="filter-group">
                         <select id="filterClass"><option value="">Class</option></select>
@@ -1967,7 +2481,7 @@
                 </div>
             </section>
 
-            <!-- ATTENDANCE -->
+            <!-- ===== ATTENDANCE ===== -->
             <section class="page-section" id="page-attendance">
                 <div class="attendance-controls">
                     <div class="form-group">
@@ -2003,76 +2517,39 @@
                 </div>
             </section>
 
-            <!-- REPORTS -->
+            <!-- ===== REPORTS ===== -->
             <section class="page-section" id="page-reports">
-                <div class="report-filters">
-                    <div class="form-group">
-                        <label>Report Type</label>
-                        <select id="reportType">
-                            <option value="class">Class Performance</option>
-                            <option value="student">Individual Student</option>
-                        </select>
-                    </div>
-                    <!-- Class & Section for both types, but hidden for student? We'll show conditionally -->
-                    <div class="form-group" id="reportClassGroup">
-                        <label>Class</label>
-                        <select id="reportClass"><option value="">All</option></select>
-                    </div>
-                    <div class="form-group" id="reportSectionGroup">
-                        <label>Section</label>
-                        <select id="reportSection"><option value="">All</option></select>
-                    </div>
-                    <!-- Student specific filters -->
-                    <div class="form-group" id="reportStudentGroup" style="display:none;">
-                        <label>Search Student</label>
-                        <input type="text" id="studentSearchInput" placeholder="Type name or ID..." />
-                    </div>
-                    <div class="form-group" id="reportStudentSelectGroup" style="display:none;">
-                        <label>Select Student</label>
-                        <select id="reportStudent"><option value="">Select</option></select>
-                    </div>
-                    <div class="form-group" style="min-width:100px;">
-                        <label>&nbsp;</label>
-                        <button class="btn-primary" id="generateReportBtn" style="width:100%;"><i class="fas fa-chart-bar"></i> Generate</button>
-                    </div>
-                </div>
-                <div id="reportOutput">
-                    <div class="empty-state">
-                        <i class="fas fa-file-alt"></i>
-                        <h3>No Report</h3>
-                        <p>Select filters and click Generate.</p>
-                    </div>
-                </div>
-                <div class="report-actions" id="reportActions" style="display:none;">
-                    <button class="btn-outline" id="printReport"><i class="fas fa-print"></i> Print</button>
-                    <button class="btn-success" id="downloadCsv"><i class="fas fa-file-csv"></i> CSV</button>
-                    <button class="btn-danger" id="downloadJson"><i class="fas fa-file-code"></i> JSON</button>
+                <div style="text-align:center;padding:40px 20px;">
+                    <i class="fas fa-file-alt" style="font-size:3rem;opacity:0.2;margin-bottom:12px;display:block;"></i>
+                    <h3 style="font-weight:600;">Reports Coming Soon</h3>
+                    <p style="color:var(--text-secondary);font-size:0.9rem;">Generate detailed reports for students and classes.</p>
                 </div>
             </section>
 
-            <!-- PROFILE -->
+            <!-- ===== PROFILE ===== -->
             <section class="page-section" id="page-profile">
-                <div class="profile-header">
-                    <div class="profile-avatar" id="profileAvatar">T</div>
-                    <div class="profile-info">
-                        <h2 id="profileName">Teacher</h2>
-                        <p id="profileEmail">teacher@attendix.com</p>
-                        <span class="badge"><i class="fas fa-check-circle"></i> Firebase Connected</span>
+                <div style="background:var(--card);border-radius:var(--radius);padding:20px 24px;border:1px solid var(--border);box-shadow:var(--shadow);margin-bottom:16px;">
+                    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+                        <div style="width:64px;height:64px;border-radius:50%;background:var(--accent);color:#0A1628;display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:700;flex-shrink:0;" id="profileAvatar">T</div>
+                        <div>
+                            <h2 id="profileName" style="font-size:1.15rem;font-weight:700;">Teacher</h2>
+                            <p id="profileEmail" style="color:var(--text-secondary);font-size:0.85rem;">teacher@attendix.com</p>
+                            <span style="display:inline-block;padding:2px 12px;border-radius:20px;background:rgba(201,168,76,0.10);color:var(--accent);font-size:0.65rem;font-weight:600;margin-top:4px;"><i class="fas fa-check-circle"></i> Connected</span>
+                        </div>
                     </div>
                 </div>
-                <div class="profile-stats">
-                    <div class="stat-item"><div class="num" id="profTotal">0</div><div class="label">Students</div></div>
-                    <div class="stat-item"><div class="num" id="profPresent">0</div><div class="label">Present Today</div></div>
-                    <div class="stat-item"><div class="num" id="profAbsent">0</div><div class="label">Absent Today</div></div>
-                    <div class="stat-item"><div class="num" id="profPercent">0%</div><div class="label">Attendance %</div></div>
-                </div>
-                <div class="chart-card">
-                    <h4><i class="fas fa-chart-bar" style="color:var(--primary);"></i> Monthly Overview</h4>
-                    <div class="chart-wrap" style="height:160px;"><canvas id="profileChart"></canvas></div>
+
+                <div class="settings-group">
+                    <h4><i class="fas fa-school"></i> School Details</h4>
+                    <div class="settings-row"><span class="label">School Name</span><span id="settingsSchoolName" style="font-weight:600;">—</span></div>
+                    <div class="settings-row"><span class="label">Address</span><span id="settingsSchoolAddress" style="font-weight:600;">—</span></div>
+                    <div class="settings-row"><span class="label">Principal</span><span id="settingsPrincipal" style="font-weight:600;">—</span></div>
+                    <div class="settings-row"><span class="label">Class Teacher</span><span id="settingsClassTeacher" style="font-weight:600;">—</span></div>
+                    <div class="settings-row"><span class="label">Academic Year</span><span id="settingsAcademicYear" style="font-weight:600;">—</span></div>
                 </div>
 
-                <div class="settings-group" style="margin-top:16px;">
-                    <h4><i class="fas fa-cog"></i> Settings</h4>
+                <div class="settings-group">
+                    <h4><i class="fas fa-cog"></i> Preferences</h4>
                     <div class="settings-row">
                         <div><div class="label">Dark Mode</div><div class="desc">Toggle dark/light theme</div></div>
                         <div class="toggle-switch" id="darkModeToggle"></div>
@@ -2081,12 +2558,16 @@
                         <div><div class="label">Display Name</div><div class="desc" id="settingsName">Teacher</div></div>
                         <button class="btn-outline btn-sm" id="editProfileBtn">Edit</button>
                     </div>
+                </div>
+
+                <div class="settings-group">
+                    <h4><i class="fas fa-database"></i> Data</h4>
                     <div class="settings-row">
-                        <div><div class="label">Export Data</div><div class="desc">Download all data as JSON</div></div>
+                        <div><div class="label">Export All Data</div><div class="desc">Download as JSON</div></div>
                         <button class="btn-outline btn-sm" id="exportAllData"><i class="fas fa-download"></i> Export</button>
                     </div>
-                    <div class="settings-row" style="border-bottom:none;padding-bottom:0;">
-                        <div><div class="label" style="color:var(--danger);">Danger Zone</div><div class="desc">Delete all your data</div></div>
+                    <div class="settings-row" style="border-bottom:none;">
+                        <div><div class="label" style="color:#EF4444;">Danger Zone</div><div class="desc">Delete all your data</div></div>
                         <button class="btn-danger btn-sm" id="clearAllData"><i class="fas fa-trash"></i> Clear</button>
                     </div>
                 </div>
@@ -2122,14 +2603,12 @@
     </div>
 
     <!-- ============================================================
-    MODALS
+    STUDENT MODAL
     ============================================================ -->
-
-    <!-- Student Modal -->
     <div class="modal-overlay" id="studentModal">
         <div class="modal-box">
             <div class="modal-header">
-                <h3 id="studentModalTitle">Add Student</h3>
+                <h3 id="studentModalTitle"><i class="fas fa-user-graduate"></i> Add Student</h3>
                 <button class="close-modal" id="closeStudentModal"><i class="fas fa-times"></i></button>
             </div>
             <form id="studentForm">
@@ -2140,14 +2619,27 @@
                 </div>
                 <div class="form-group"><label>Full Name</label><input type="text" id="sName" placeholder="Full name" required /></div>
                 <div class="form-row">
+                    <div class="form-group"><label>Date of Birth</label><input type="date" id="sDob" /></div>
+                    <div class="form-group"><label>Gender</label>
+                        <select id="sGender"><option value="">Select</option><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Father's Name</label><input type="text" id="sFather" placeholder="Father's name" /></div>
+                    <div class="form-group"><label>Mother's Name</label><input type="text" id="sMother" placeholder="Mother's name" /></div>
+                </div>
+                <div class="form-row">
                     <div class="form-group"><label>Class</label><input type="text" id="sClass" placeholder="e.g. 10" required /></div>
                     <div class="form-group"><label>Section</label><input type="text" id="sSection" placeholder="e.g. A" required /></div>
                 </div>
-                <div class="form-group"><label>Father's Name</label><input type="text" id="sFather" placeholder="Father's name" /></div>
                 <div class="form-row">
-                    <div class="form-group"><label>Mobile</label><input type="text" id="sMobile" placeholder="Phone" /></div>
-                    <div class="form-group"><label>Address</label><input type="text" id="sAddress" placeholder="Address" /></div>
+                    <div class="form-group"><label>Religion</label><input type="text" id="sReligion" placeholder="Religion" /></div>
+                    <div class="form-group"><label>Blood Group</label>
+                        <select id="sBlood"><option value="">Select</option><option value="A+">A+</option><option value="A-">A-</option><option value="B+">B+</option><option value="B-">B-</option><option value="AB+">AB+</option><option value="AB-">AB-</option><option value="O+">O+</option><option value="O-">O-</option></select>
+                    </div>
                 </div>
+                <div class="form-group"><label>Address</label><input type="text" id="sAddress" placeholder="Address" /></div>
+                <div class="form-group"><label>Date of Admission</label><input type="date" id="sAdmissionDate" /></div>
                 <div class="modal-actions">
                     <button type="button" class="btn-secondary" id="cancelStudentModal">Cancel</button>
                     <button type="submit" class="btn-primary" style="width:auto;padding:8px 28px;"><i class="fas fa-save"></i> Save</button>
@@ -2156,24 +2648,26 @@
         </div>
     </div>
 
-    <!-- Edit Profile Modal -->
-    <div class="modal-overlay" id="editProfileModal">
-        <div class="modal-box">
-            <div class="modal-header">
-                <h3>Edit Profile</h3>
-                <button class="close-modal" id="closeEditProfile"><i class="fas fa-times"></i></button>
+    <!-- ============================================================
+    ID CARD MODAL
+    ============================================================ -->
+    <div class="idcard-overlay" id="idcardModal">
+        <div class="idcard-container">
+            <div class="idcard-actions">
+                <button class="btn-print" onclick="printIDCard()"><i class="fas fa-print"></i> Print</button>
+                <button class="btn-pdf" onclick="downloadPDF()"><i class="fas fa-file-pdf"></i> PDF</button>
+                <button class="btn-pdf" onclick="downloadImage()"><i class="fas fa-image"></i> Image</button>
+                <button class="btn-close" id="closeIdcard"><i class="fas fa-times"></i> Close</button>
             </div>
-            <form id="editProfileForm">
-                <div class="form-group"><label>Display Name</label><input type="text" id="editProfileName" placeholder="Your name" required /></div>
-                <div class="modal-actions">
-                    <button type="button" class="btn-secondary" id="cancelEditProfile">Cancel</button>
-                    <button type="submit" class="btn-primary" style="width:auto;padding:8px 28px;"><i class="fas fa-save"></i> Save</button>
-                </div>
-            </form>
+            <div id="idCardContainer">
+                <!-- ID Card will be dynamically generated here -->
+            </div>
         </div>
     </div>
 
-    <!-- Confirm Modal -->
+    <!-- ============================================================
+    CONFIRM MODAL
+    ============================================================ -->
     <div class="modal-overlay confirm-dialog" id="confirmModal">
         <div class="modal-box">
             <div class="confirm-icon"><i class="fas fa-exclamation-triangle"></i></div>
@@ -2183,6 +2677,25 @@
                 <button class="btn-secondary" id="confirmCancel">Cancel</button>
                 <button class="btn-danger" id="confirmOk"><i class="fas fa-check"></i> Confirm</button>
             </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    EDIT PROFILE MODAL
+    ============================================================ -->
+    <div class="modal-overlay" id="editProfileModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3><i class="fas fa-user-edit"></i> Edit Profile</h3>
+                <button class="close-modal" id="closeEditProfile"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="editProfileForm">
+                <div class="form-group"><label>Display Name</label><input type="text" id="editProfileName" placeholder="Your name" required /></div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" id="cancelEditProfile">Cancel</button>
+                    <button type="submit" class="btn-primary" style="width:auto;padding:8px 28px;"><i class="fas fa-save"></i> Save</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -2218,7 +2731,9 @@
             deleteDoc,
             doc,
             onSnapshot,
-            writeBatch
+            writeBatch,
+            getDoc,
+            setDoc
         } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-analytics.js";
 
@@ -2242,11 +2757,10 @@
         } catch (err) {
             console.error('❌ Firebase init error:', err);
             document.body.innerHTML = `
-                    <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;gap:12px;padding:20px;text-align:center;font-family:sans-serif;">
+                    <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;gap:12px;padding:20px;text-align:center;font-family:Inter,sans-serif;">
                         <div style="font-size:3rem;">⚠️</div>
                         <h2>Firebase Connection Error</h2>
                         <p style="color:#666;max-width:400px;">${err.message || 'Unknown error'}</p>
-                        <p style="font-size:0.8rem;color:#999;">Please check your internet connection and Firebase config.</p>
                     </div>
                 `;
         }
@@ -2257,7 +2771,7 @@
         const googleProvider = new GoogleAuthProvider();
 
         // ============================================================
-        // PERSISTENCE - User stays logged in
+        // PERSISTENCE
         // ============================================================
         setPersistence(auth, browserLocalPersistence)
             .then(() => console.log('✅ Auth persistence set to local'))
@@ -2273,15 +2787,101 @@
         let editingStudentId = null;
         let confirmCallback = null;
         let isLoginMode = true;
-        let monthlyChartInstance = null;
-        let pieChartInstance = null;
-        let profileChartInstance = null;
         let isInitialized = false;
         let uid = null;
+        let schoolData = {};
+        let schoolStatus = 'open'; // 'open' or 'closed'
+        let selectedStudentForCard = null;
 
         // Listeners
         let studentsListener = null;
         let attendanceListener = null;
+
+        // ============================================================
+        // INDIAN HOLIDAYS CALENDAR (Yearly updated)
+        // ============================================================
+        function getIndianHolidays(year) {
+            // Fixed-date holidays (Gregorian)
+            const fixed = [
+                { date: `${year}-01-26`, name: 'Republic Day' },
+                { date: `${year}-08-15`, name: 'Independence Day' },
+                { date: `${year-1}-10-02`, name: 'Gandhi Jayanti' }, // Need to check year
+            ];
+            // Fix Gandhi Jayanti - Oct 2
+            fixed.push({ date: `${year}-10-02`, name: 'Gandhi Jayanti' });
+
+            // Variable-date holidays (based on lunar calendar - approximate)
+            // Holi - March (full moon day in Phalguna) - approximate
+            const holiApprox = new Date(year, 2, 14 + (year % 3));
+            // Diwali - October/November (new moon day in Kartika) - approximate
+            const diwaliApprox = new Date(year, 9, 24 + (year % 4));
+
+            const holidays = [
+                ...fixed,
+                { date: `${year}-01-14`, name: 'Makar Sankranti' },
+                { date: `${year}-01-26`, name: 'Republic Day' },
+                { date: `${year}-03-08`, name: 'Maha Shivaratri' },
+                { date: `${holiApprox.getFullYear()}-${String(holiApprox.getMonth()+1).padStart(2,'0')}-${String(holiApprox.getDate()).padStart(2,'0')}`,
+                    name: 'Holi' },
+                { date: `${year}-03-22`, name: 'Ram Navami' },
+                { date: `${year}-04-10`, name: 'Mahavir Jayanti' },
+                { date: `${year}-04-14`, name: 'Ambedkar Jayanti' },
+                { date: `${year}-04-18`, name: 'Good Friday' },
+                { date: `${year}-05-01`, name: 'May Day' },
+                { date: `${year}-05-23`, name: 'Buddha Purnima' },
+                { date: `${year}-06-21`, name: 'International Yoga Day' },
+                { date: `${year}-07-17`, name: 'Eid-ul-Adha' },
+                { date: `${year}-08-15`, name: 'Independence Day' },
+                { date: `${year}-08-19`, name: 'Raksha Bandhan' },
+                { date: `${year}-08-26`, name: 'Janmashtami' },
+                { date: `${year}-09-02`, name: 'Ganesh Chaturthi' },
+                { date: `${year}-10-02`, name: 'Gandhi Jayanti' },
+                { date: `${diwaliApprox.getFullYear()}-${String(diwaliApprox.getMonth()+1).padStart(2,'0')}-${String(diwaliApprox.getDate()).padStart(2,'0')}`,
+                    name: 'Diwali' },
+                { date: `${year}-11-05`, name: 'Chhath Puja' },
+                { date: `${year}-12-25`, name: 'Christmas' },
+            ];
+
+            // Remove duplicates (by date)
+            const unique = {};
+            holidays.forEach(h => { unique[h.date] = h; });
+            return Object.values(unique);
+        }
+
+        function getHolidaysForMonth(year, month) {
+            const all = getIndianHolidays(year);
+            const prefix = `${year}-${String(month+1).padStart(2,'0')}`;
+            return all.filter(h => h.date.startsWith(prefix));
+        }
+
+        function isHoliday(dateStr) {
+            const year = parseInt(dateStr.split('-')[0]);
+            const holidays = getIndianHolidays(year);
+            return holidays.some(h => h.date === dateStr);
+        }
+
+        function getHolidayName(dateStr) {
+            const year = parseInt(dateStr.split('-')[0]);
+            const holidays = getIndianHolidays(year);
+            const found = holidays.find(h => h.date === dateStr);
+            return found ? found.name : null;
+        }
+
+        function getMonthOpenDays(year, month, closedDates = []) {
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            let openDays = 0;
+            for (let d = 1; d <= daysInMonth; d++) {
+                const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+                const dayOfWeek = new Date(year, month, d).getDay();
+                const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
+                const isHolidayDay = isHoliday(dateStr);
+                const isClosed = closedDates.includes(dateStr);
+                if (!isWeekend && !isHolidayDay && !isClosed) {
+                    openDays++;
+                }
+            }
+            return openDays;
+        }
 
         // ============================================================
         // DOM REFS
@@ -2303,6 +2903,19 @@
         const forgotPwLink = $('forgotPwLink');
         const signupToggle = $('signupToggle');
         const googleLoginBtn = $('googleLoginBtn');
+
+        const setupModal = $('setupModal');
+        const setupForm = $('setupForm');
+        const setupSchoolName = $('setupSchoolName');
+        const setupSchoolAddress = $('setupSchoolAddress');
+        const setupPrincipal = $('setupPrincipal');
+        const setupClassTeacher = $('setupClassTeacher');
+        const setupMotto = $('setupMotto');
+        const setupAcademicYear = $('setupAcademicYear');
+
+        const statusModal = $('statusModal');
+        const statusOpen = $('statusOpen');
+        const statusClosed = $('statusClosed');
 
         const themeToggle = $('themeToggle');
         const darkModeToggle = $('darkModeToggle');
@@ -2330,11 +2943,16 @@
         const sRoll = $('sRoll');
         const sId = $('sId');
         const sName = $('sName');
+        const sDob = $('sDob');
+        const sGender = $('sGender');
+        const sFather = $('sFather');
+        const sMother = $('sMother');
         const sClass = $('sClass');
         const sSection = $('sSection');
-        const sFather = $('sFather');
-        const sMobile = $('sMobile');
+        const sReligion = $('sReligion');
+        const sBlood = $('sBlood');
         const sAddress = $('sAddress');
+        const sAdmissionDate = $('sAdmissionDate');
 
         const attClass = $('attClass');
         const attSection = $('attSection');
@@ -2344,26 +2962,10 @@
         const markAllAbsent = $('markAllAbsent');
         const saveAttendanceBtn = $('saveAttendanceBtn');
 
-        const reportType = $('reportType');
-        const reportClass = $('reportClass');
-        const reportSection = $('reportSection');
-        const reportStudent = $('reportStudent');
-        const studentSearchInput = $('studentSearchInput');
-        const reportClassGroup = $('reportClassGroup');
-        const reportSectionGroup = $('reportSectionGroup');
-        const reportStudentGroup = $('reportStudentGroup');
-        const reportStudentSelectGroup = $('reportStudentSelectGroup');
-        const generateReportBtn = $('generateReportBtn');
-        const reportOutput = $('reportOutput');
-        const reportActions = $('reportActions');
-        const printReport = $('printReport');
-        const downloadCsv = $('downloadCsv');
-        const downloadJson = $('downloadJson');
+        const idcardModal = $('idcardModal');
+        const idCardContainer = $('idCardContainer');
+        const closeIdcard = $('closeIdcard');
 
-        const profTotal = $('profTotal');
-        const profPresent = $('profPresent');
-        const profAbsent = $('profAbsent');
-        const profPercent = $('profPercent');
         const profileAvatar = $('profileAvatar');
         const profileName = $('profileName');
         const profileEmail = $('profileEmail');
@@ -2389,14 +2991,24 @@
         const navItems = $$('.bottom-nav .nav-item');
         const pageSections = $$('.page-section');
 
+        const dashSchoolName = $('dashSchoolName');
+        const dashTeacherName = $('dashTeacherName');
+        const dashSchoolAddress = $('dashSchoolAddress');
+        const schoolStatusBadge = $('schoolStatusBadge');
+
+        const settingsSchoolName = $('settingsSchoolName');
+        const settingsSchoolAddress = $('settingsSchoolAddress');
+        const settingsPrincipal = $('settingsPrincipal');
+        const settingsClassTeacher = $('settingsClassTeacher');
+        const settingsAcademicYear = $('settingsAcademicYear');
+
         // ============================================================
         // TOAST
         // ============================================================
         function showToast(message, type = 'info', duration = 3500) {
             const icons = { info: 'fa-circle-info', success: 'fa-check-circle', error: 'fa-circle-exclamation',
                 warning: 'fa-triangle-exclamation' };
-            const colors = { info: 'var(--primary)', success: 'var(--success)', error: 'var(--danger)',
-                warning: 'var(--warning)' };
+            const colors = { info: 'var(--accent)', success: '#22C55E', error: '#EF4444', warning: '#F59E0B' };
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
             toast.innerHTML = `
@@ -2458,12 +3070,23 @@
                 loginPage.style.display = 'none';
                 appEl.classList.add('active');
 
+                // Load school data
+                await loadSchoolData();
+
+                // Check if first time login (no school data)
+                if (!schoolData || !schoolData.schoolName) {
+                    setupModal.classList.add('open');
+                } else {
+                    // Check school status for today
+                    checkSchoolStatus();
+                }
+
                 if (!isInitialized) {
                     await loadAllData();
                     navigateTo('dashboard');
                     isInitialized = true;
                     hideLoader();
-                    showToast(`Welcome, ${displayName}! 🔥`, 'success', 2000);
+                    showToast(`Welcome, ${displayName}! 🎓`, 'success', 2000);
                 }
             } else {
                 currentUser = null;
@@ -2472,13 +3095,123 @@
                 appEl.classList.remove('active');
                 loginPage.style.display = 'flex';
                 hideLoader();
-                // Clean up listeners
                 if (studentsListener) studentsListener();
                 if (attendanceListener) attendanceListener();
                 students = [];
                 attendance = [];
                 renderStudentTable();
                 refreshDashboard();
+            }
+        });
+
+        // ============================================================
+        // SCHOOL DATA (Firestore)
+        // ============================================================
+        async function loadSchoolData() {
+            if (!uid) return;
+            try {
+                const docRef = doc(db, 'schools', uid);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    schoolData = docSnap.data();
+                    updateSchoolUI();
+                } else {
+                    schoolData = {};
+                }
+            } catch (err) {
+                console.error('Error loading school data:', err);
+                schoolData = {};
+            }
+        }
+
+        function updateSchoolUI() {
+            const name = schoolData.schoolName || 'School Name';
+            dashSchoolName.innerHTML = `📚 ${name} <small id="dashTeacherName">- ${schoolData.classTeacher || 'Teacher'}</small>`;
+            dashSchoolAddress.textContent = schoolData.schoolAddress || '';
+            settingsSchoolName.textContent = schoolData.schoolName || '—';
+            settingsSchoolAddress.textContent = schoolData.schoolAddress || '—';
+            settingsPrincipal.textContent = schoolData.principal || '—';
+            settingsClassTeacher.textContent = schoolData.classTeacher || '—';
+            settingsAcademicYear.textContent = schoolData.academicYear || '—';
+            // Update teacher name in header
+            if (schoolData.classTeacher) {
+                userName.textContent = schoolData.classTeacher;
+                userAvatar.textContent = schoolData.classTeacher.charAt(0).toUpperCase();
+            }
+        }
+
+        // ============================================================
+        // SCHOOL STATUS
+        // ============================================================
+        function checkSchoolStatus() {
+            const today = new Date().toISOString().split('T')[0];
+            const statusKey = `status_${today}`;
+            const savedStatus = localStorage.getItem(`attendix_status_${uid}_${today}`);
+            if (savedStatus) {
+                schoolStatus = savedStatus;
+                updateStatusUI();
+            } else {
+                statusModal.classList.add('open');
+            }
+        }
+
+        function updateStatusUI() {
+            if (schoolStatus === 'open') {
+                schoolStatusBadge.textContent = '● Open';
+                schoolStatusBadge.className = 'school-status-badge open';
+            } else {
+                schoolStatusBadge.textContent = '● Closed';
+                schoolStatusBadge.className = 'school-status-badge closed';
+            }
+        }
+
+        statusOpen.addEventListener('click', () => {
+            const today = new Date().toISOString().split('T')[0];
+            schoolStatus = 'open';
+            localStorage.setItem(`attendix_status_${uid}_${today}`, 'open');
+            statusModal.classList.remove('open');
+            updateStatusUI();
+            showToast('School marked as Open ✅', 'success');
+        });
+
+        statusClosed.addEventListener('click', () => {
+            const today = new Date().toISOString().split('T')[0];
+            schoolStatus = 'closed';
+            localStorage.setItem(`attendix_status_${uid}_${today}`, 'closed');
+            statusModal.classList.remove('open');
+            updateStatusUI();
+            showToast('School marked as Closed', 'warning');
+        });
+
+        // ============================================================
+        // SETUP FORM
+        // ============================================================
+        setupForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
+                schoolName: setupSchoolName.value.trim(),
+                schoolAddress: setupSchoolAddress.value.trim(),
+                principal: setupPrincipal.value.trim(),
+                classTeacher: setupClassTeacher.value.trim() || 'Teacher',
+                motto: setupMotto.value.trim(),
+                academicYear: setupAcademicYear.value.trim(),
+                updatedAt: new Date().toISOString(),
+                uid: uid
+            };
+            if (!data.schoolName) {
+                showToast('Please enter school name.', 'error');
+                return;
+            }
+            try {
+                await setDoc(doc(db, 'schools', uid), data);
+                schoolData = data;
+                updateSchoolUI();
+                setupModal.classList.remove('open');
+                showToast('School setup complete! 🎉', 'success');
+                // Check status
+                checkSchoolStatus();
+            } catch (err) {
+                showToast('Error saving: ' + err.message, 'error');
             }
         });
 
@@ -2490,10 +3223,8 @@
             loginBtnText.textContent = isLoginMode ? 'Sign In' : 'Sign Up';
             if (isLoginMode) {
                 signupToggle.textContent = 'create a new account';
-                signupToggle.style.color = 'var(--primary)';
             } else {
                 signupToggle.textContent = 'sign in to existing account';
-                signupToggle.style.color = 'var(--primary)';
             }
         }
 
@@ -2516,7 +3247,7 @@
             if (!email) { showToast('Please enter your email.', 'warning'); return; }
             try {
                 await sendPasswordResetEmail(auth, email);
-                showToast('Password reset sent! Check your inbox.', 'success');
+                showToast('Password reset sent!', 'success');
             } catch (err) { showToast(err.message, 'error'); }
         });
 
@@ -2538,12 +3269,8 @@
             }
         });
 
-        // ============================================================
-        // GOOGLE LOGIN
-        // ============================================================
         googleLoginBtn.addEventListener('click', async () => {
             try {
-                showToast('Opening Google login...', 'info', 2000);
                 const result = await signInWithPopup(auth, googleProvider);
                 const user = result.user;
                 if (!user.displayName) {
@@ -2551,19 +3278,10 @@
                 }
                 showToast('Signed in with Google! ✅', 'success');
             } catch (err) {
-                console.error('Google login error:', err);
                 if (err.code === 'auth/popup-closed-by-user') {
-                    showToast('Login cancelled. Please try again.', 'warning');
-                } else if (err.code === 'auth/operation-not-allowed') {
-                    showToast('⚠️ Google sign-in is not enabled in Firebase Console. Please enable it in Authentication → Sign-in methods.',
-                        'error', 6000);
-                } else if (err.code === 'auth/unauthorized-domain') {
-                    showToast('⚠️ This domain is not authorized. Add it in Firebase Console → Authentication → Authorized domains.',
-                        'error', 6000);
-                } else if (err.code === 'auth/popup-blocked') {
-                    showToast('⚠️ Popup blocked! Please allow popups for this site.', 'error', 5000);
+                    showToast('Login cancelled.', 'warning');
                 } else {
-                    showToast('Google login error: ' + err.message, 'error', 5000);
+                    showToast('Google login error: ' + err.message, 'error');
                 }
             }
         });
@@ -2593,7 +3311,6 @@
             if (page === 'dashboard') refreshDashboard();
             if (page === 'students') renderStudentTable();
             if (page === 'attendance') loadAttendancePage();
-            if (page === 'reports') populateReportFilters();
             if (page === 'profile') refreshProfile();
         }
 
@@ -2604,13 +3321,10 @@
         });
 
         // ============================================================
-        // FIRESTORE: LOAD DATA - FIXED: NO orderBy, client-side sort
+        // FIRESTORE: LOAD DATA
         // ============================================================
         async function loadAllData() {
-            if (!uid) {
-                console.warn('No UID, cannot load data');
-                return;
-            }
+            if (!uid) return;
 
             // Students
             if (studentsListener) studentsListener();
@@ -2621,7 +3335,6 @@
                     const data = doc.data();
                     students.push({ docId: doc.id, ...data });
                 });
-                // Sort client-side
                 students.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
                 if (currentPage === 'students') renderStudentTable();
                 if (currentPage === 'dashboard') refreshDashboard();
@@ -2629,7 +3342,6 @@
                 if (currentPage === 'profile') refreshProfile();
                 populateFilterDropdowns();
                 populateAttDropdowns();
-                populateReportFilters();
             }, (err) => {
                 console.error('Students error:', err);
                 showToast('Error loading students: ' + err.message, 'error');
@@ -2647,7 +3359,6 @@
                     const data = doc.data();
                     attendance.push({ docId: doc.id, ...data });
                 });
-                // Sort client-side by date descending
                 attendance.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
                 if (currentPage === 'dashboard') refreshDashboard();
                 if (currentPage === 'attendance') loadAttendanceStudents();
@@ -2683,130 +3394,24 @@
             statLeave.textContent = leave;
             statPercent.textContent = percent + '%';
 
-            profTotal.textContent = total;
-            profPresent.textContent = present;
-            profAbsent.textContent = absent;
-            profPercent.textContent = percent + '%';
-
-            updateCharts();
-            renderCalendar();
+            updateCalendar();
         }
 
         // ============================================================
-        // CHARTS
-        // ============================================================
-        function updateCharts() {
-            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-            const now = new Date();
-            const year = now.getFullYear();
-            const monthData = months.map((m, idx) => {
-                const key = `${year}-${String(idx+1).padStart(2,'0')}`;
-                const atts = attendance.filter(a => a.date && a.date.startsWith(key));
-                const pres = atts.filter(a => a.status === 'present').length;
-                const abs = atts.filter(a => a.status === 'absent').length;
-                return { month: m, present: pres, absent: abs };
-            });
-
-            if (monthlyChartInstance) monthlyChartInstance.destroy();
-            const ctx1 = document.getElementById('monthlyChart').getContext('2d');
-            monthlyChartInstance = new Chart(ctx1, {
-                type: 'line',
-                data: {
-                    labels: monthData.map(d => d.month),
-                    datasets: [{
-                        label: 'Present',
-                        data: monthData.map(d => d.present),
-                        borderColor: '#22C55E',
-                        backgroundColor: 'rgba(34,197,94,0.08)',
-                        fill: true,
-                        tension: 0.3,
-                        pointRadius: 2,
-                        borderWidth: 2
-                    }, {
-                        label: 'Absent',
-                        data: monthData.map(d => d.absent),
-                        borderColor: '#EF4444',
-                        backgroundColor: 'rgba(239,68,68,0.06)',
-                        fill: true,
-                        tension: 0.3,
-                        pointRadius: 2,
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { position: 'top', labels: { boxWidth: 10, font: { size: 9 } } } },
-                    scales: { y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.04)' } },
-                    x: { grid: { display: false } } }
-                }
-            });
-
-            const totalPres = attendance.filter(a => a.status === 'present').length;
-            const totalAbs = attendance.filter(a => a.status === 'absent').length;
-            const totalLeave = attendance.filter(a => a.status === 'leave').length;
-            if (pieChartInstance) pieChartInstance.destroy();
-            const ctx2 = document.getElementById('pieChart').getContext('2d');
-            pieChartInstance = new Chart(ctx2, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Present', 'Absent', 'Leave'],
-                    datasets: [{
-                        data: [totalPres || 1, totalAbs || 1, totalLeave || 1],
-                        backgroundColor: ['#22C55E', '#EF4444', '#F59E0B'],
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 9 } } } },
-                    cutout: '65%'
-                }
-            });
-
-            if (profileChartInstance) profileChartInstance.destroy();
-            const ctx3 = document.getElementById('profileChart').getContext('2d');
-            const last6 = [];
-            for (let i = 5; i >= 0; i--) { const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-                last6.push(d); }
-            const pLabels = last6.map(d => months[d.getMonth()]);
-            const pData = last6.map(d => {
-                const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
-                const atts = attendance.filter(a => a.date && a.date.startsWith(key));
-                return atts.filter(a => a.status === 'present').length;
-            });
-            profileChartInstance = new Chart(ctx3, {
-                type: 'bar',
-                data: {
-                    labels: pLabels,
-                    datasets: [{
-                        label: 'Present',
-                        data: pData,
-                        backgroundColor: 'rgba(37,99,235,0.55)',
-                        borderColor: 'var(--primary)',
-                        borderWidth: 1,
-                        borderRadius: 4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: { y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.04)' } },
-                    x: { grid: { display: false } } }
-                }
-            });
-        }
-
-        // ============================================================
-        // CALENDAR
+        // CALENDAR WITH HOLIDAYS
         // ============================================================
         let calMonth = new Date().getMonth();
         let calYear = new Date().getFullYear();
 
+        function updateCalendar() {
+            renderCalendar();
+            updateHolidayList();
+            updateSchoolDays();
+        }
+
         function renderCalendar() {
             const container = document.getElementById('miniCalendar');
+            if (!container) return;
             const now = new Date();
             const today = now.getDate();
             const todayMonth = now.getMonth();
@@ -2833,20 +3438,72 @@
                         <div class="cal-day" style="font-weight:600;font-size:0.6rem;color:var(--text-secondary);">Fr</div>
                         <div class="cal-day" style="font-weight:600;font-size:0.6rem;color:var(--text-secondary);">Sa</div>
                     `;
-            for (let i = firstDay - 1; i >= 0; i--) { const d = daysInPrev - i;
-                html += `<div class="cal-day other">${d}</div>`; }
-            for (let d = 1; d <= daysInMonth; d++) {
-                const isToday = (d === today && calMonth === todayMonth && calYear === todayYear);
-                const isWeekend = (new Date(calYear, calMonth, d).getDay() === 0 || new Date(calYear, calMonth, d)
-                    .getDay() === 6);
-                html +=
-                    `<div class="cal-day ${isToday ? 'today' : ''} ${isWeekend ? 'weekend' : ''}">${d}</div>`;
+
+            for (let i = firstDay - 1; i >= 0; i--) {
+                const d = daysInPrev - i;
+                html += `<div class="cal-day other">${d}</div>`;
             }
+
+            const closedDates = []; // We'll track closed dates from status
+            const todayStr = new Date().toISOString().split('T')[0];
+
+            for (let d = 1; d <= daysInMonth; d++) {
+                const dateStr = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+                const dayOfWeek = new Date(calYear, calMonth, d).getDay();
+                const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
+                const isHolidayDay = isHoliday(dateStr);
+                const holidayName = getHolidayName(dateStr);
+                const isToday = (d === today && calMonth === todayMonth && calYear === todayYear);
+
+                let classes = 'cal-day';
+                if (isWeekend && !isHolidayDay) classes += ' weekend';
+                if (isToday) classes += ' today';
+                if (isHolidayDay) classes += ' holiday';
+                if (dateStr === todayStr && schoolStatus === 'closed') classes += ' closed';
+
+                let title = '';
+                if (isHolidayDay && holidayName) title = ` 🎉 ${holidayName}`;
+                if (dateStr === todayStr && schoolStatus === 'closed') title = ' 🏫 Closed';
+
+                html += `<div class="${classes}" title="${title}">${d}</div>`;
+            }
+
             const totalCells = firstDay + daysInMonth;
             const remaining = (7 - (totalCells % 7)) % 7;
-            for (let d = 1; d <= remaining; d++) { html += `<div class="cal-day other">${d}</div>`; }
+            for (let d = 1; d <= remaining; d++) {
+                html += `<div class="cal-day other">${d}</div>`;
+            }
+
             html += '</div>';
             container.innerHTML = html;
+        }
+
+        function updateHolidayList() {
+            const container = document.getElementById('holidayList');
+            if (!container) return;
+            const holidays = getHolidaysForMonth(calYear, calMonth);
+            if (holidays.length === 0) {
+                container.innerHTML = '<div style="font-size:0.75rem;color:var(--text-secondary);">No holidays this month.</div>';
+                return;
+            }
+            let html = '<div style="font-size:0.75rem;font-weight:600;margin-bottom:4px;color:var(--text-secondary);">🎉 Holidays & Festivals</div>';
+            holidays.forEach(h => {
+                const dateParts = h.date.split('-');
+                const displayDate = `${dateParts[2]}/${dateParts[1]}`;
+                html +=
+                    `<div class="holiday-item"><span>${h.name}</span><span class="h-date">${displayDate}</span></div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        function updateSchoolDays() {
+            const container = document.getElementById('schoolDaysInfo');
+            if (!container) return;
+            const openDays = getMonthOpenDays(calYear, calMonth, []);
+            // Count total working days including past months
+            const totalWorking = openDays; // For current month only
+            document.getElementById('monthOpenDays').textContent = openDays;
+            document.getElementById('totalWorkingDays').textContent = openDays;
         }
 
         window.changeCalMonth = function(dir) {
@@ -2855,7 +3512,7 @@
                 calYear--; }
             if (calMonth > 11) { calMonth = 0;
                 calYear++; }
-            renderCalendar();
+            updateCalendar();
         };
 
         // ============================================================
@@ -2891,6 +3548,7 @@
                         <td>${s.section || '—'}</td>
                         <td style="text-align:center;">
                             <div class="actions-cell" style="justify-content:center;">
+                                <button onclick="window.viewIDCard('${s.docId}')" title="View ID Card"><i class="fas fa-id-card"></i></button>
                                 <button onclick="window.editStudent('${s.docId}')"><i class="fas fa-edit"></i></button>
                                 <button class="danger" onclick="window.deleteStudent('${s.docId}')"><i class="fas fa-trash"></i></button>
                             </div>
@@ -2914,15 +3572,20 @@
             studentModal.classList.add('open');
             if (student) {
                 studentModalTitle.textContent = 'Edit Student';
-                editStudentId.value = student.docId; // Store Firestore doc ID
+                editStudentId.value = student.docId;
                 sRoll.value = student.roll || '';
                 sId.value = student.id || '';
                 sName.value = student.name || '';
+                sDob.value = student.dob || '';
+                sGender.value = student.gender || '';
+                sFather.value = student.father || '';
+                sMother.value = student.mother || '';
                 sClass.value = student.class || '';
                 sSection.value = student.section || '';
-                sFather.value = student.father || '';
-                sMobile.value = student.mobile || '';
+                sReligion.value = student.religion || '';
+                sBlood.value = student.blood || '';
                 sAddress.value = student.address || '';
+                sAdmissionDate.value = student.admissionDate || '';
             } else {
                 studentModalTitle.textContent = 'Add Student';
                 editStudentId.value = '';
@@ -2941,22 +3604,23 @@
 
         studentForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-
-            if (!uid) {
-                showToast('You must be logged in to add students.', 'error');
-                return;
-            }
+            if (!uid) { showToast('You must be logged in.', 'error'); return; }
 
             const data = {
                 uid: uid,
                 id: sId.value.trim(),
                 roll: sRoll.value.trim(),
                 name: sName.value.trim(),
+                dob: sDob.value || '',
+                gender: sGender.value || '',
+                father: sFather.value.trim() || '',
+                mother: sMother.value.trim() || '',
                 class: sClass.value.trim(),
                 section: sSection.value.trim(),
-                father: sFather.value.trim(),
-                mobile: sMobile.value.trim(),
-                address: sAddress.value.trim(),
+                religion: sReligion.value.trim() || '',
+                blood: sBlood.value || '',
+                address: sAddress.value.trim() || '',
+                admissionDate: sAdmissionDate.value || '',
                 updatedAt: new Date().toISOString()
             };
 
@@ -2968,26 +3632,17 @@
             const editDocId = editStudentId.value;
             try {
                 if (editDocId) {
-                    // Update existing student using docId
                     const docRef = doc(db, 'students', editDocId);
                     await updateDoc(docRef, data);
                     showToast('Student updated!', 'success');
                 } else {
-                    // Check if custom ID already exists
                     const existing = students.find(s => s.id === data.id);
-                    if (existing) {
-                        showToast('Student ID already exists!', 'error');
-                        return;
-                    }
-                    await addDoc(collection(db, 'students'), {
-                        ...data,
-                        createdAt: new Date().toISOString()
-                    });
-                    showToast('Student added successfully!', 'success');
+                    if (existing) { showToast('Student ID exists!', 'error'); return; }
+                    await addDoc(collection(db, 'students'), { ...data, createdAt: new Date().toISOString() });
+                    showToast('Student added!', 'success');
                 }
                 closeStudentModalFn();
             } catch (err) {
-                console.error('Error saving student:', err);
                 showToast('Error: ' + err.message, 'error');
             }
         });
@@ -2998,7 +3653,7 @@
         };
 
         window.deleteStudent = function(docId) {
-            showConfirm('Delete Student', `Delete this student?`, async () => {
+            showConfirm('Delete Student', 'Delete this student?', async () => {
                 try {
                     await deleteDoc(doc(db, 'students', docId));
                     showToast('Student deleted.', 'info');
@@ -3085,8 +3740,8 @@
                                 </div>
                             </div>
                             <div class="stu-actions">
-                                <button class="${status==='present'?'present':''}" onclick="window.markAtt(${idx},'present')"><i class="fas fa-check"></i> P</button>
-                                <button class="${status==='absent'?'absent':''}" onclick="window.markAtt(${idx},'absent')"><i class="fas fa-times"></i> A</button>
+                                <button class="${status==='present'?'present':''}" onclick="window.markAtt(${idx},'present')"><i class="fas fa-check-circle"></i> P</button>
+                                <button class="${status==='absent'?'absent':''}" onclick="window.markAtt(${idx},'absent')"><i class="fas fa-times-circle"></i> A</button>
                                 <button class="${status==='leave'?'leave':''}" onclick="window.markAtt(${idx},'leave')"><i class="fas fa-clock"></i> L</button>
                             </div>
                         </div>
@@ -3120,8 +3775,14 @@
             if (!cls || !sec || !date) { showToast('Select class, section & date.', 'error'); return; }
             const toSave = currentAttStudents.filter(s => s.status && s.status !== 'unmarked');
             if (toSave.length === 0) { showToast('Mark some students first.', 'warning'); return; }
-
             if (!uid) { showToast('You must be logged in.', 'error'); return; }
+
+            // Check if school is closed
+            const today = new Date().toISOString().split('T')[0];
+            if (date === today && schoolStatus === 'closed') {
+                showToast('School is closed today! Cannot mark attendance.', 'error');
+                return;
+            }
 
             try {
                 const existing = attendance.filter(a => a.date === date && a.class === cls && a.section === sec);
@@ -3153,184 +3814,221 @@
         attDate.addEventListener('change', loadAttendanceStudents);
 
         // ============================================================
-        // REPORTS - Enhanced with student search and filters
+        // ID CARD - PROFESSIONAL DESIGN
         // ============================================================
-        function populateReportFilters() {
-            const classes = [...new Set(students.map(s => s.class).filter(Boolean))].sort();
-            const sections = [...new Set(students.map(s => s.section).filter(Boolean))].sort();
-            const curClass = reportClass.value;
-            const curSection = reportSection.value;
-            reportClass.innerHTML = `<option value="">All Classes</option>` + classes.map(c =>
-                `<option value="${c}" ${c===curClass?'selected':''}>${c}</option>`).join('');
-            reportSection.innerHTML = `<option value="">All Sections</option>` + sections.map(s =>
-                `<option value="${s}" ${s===curSection?'selected':''}>${s}</option>`).join('');
+        window.viewIDCard = function(docId) {
+            const student = students.find(s => s.docId === docId);
+            if (!student) { showToast('Student not found.', 'error'); return; }
+            selectedStudentForCard = student;
+            generateIDCard(student);
+            idcardModal.classList.add('open');
+        };
 
-            // Update student dropdown based on class/section and search
-            updateStudentDropdown();
-
-            // Toggle visibility based on report type
-            const type = reportType.value;
-            if (type === 'student') {
-                reportStudentGroup.style.display = 'block';
-                reportStudentSelectGroup.style.display = 'block';
-                reportClassGroup.style.display = 'block';
-                reportSectionGroup.style.display = 'block';
-            } else {
-                reportStudentGroup.style.display = 'none';
-                reportStudentSelectGroup.style.display = 'none';
-                reportClassGroup.style.display = 'block';
-                reportSectionGroup.style.display = 'block';
-            }
-        }
-
-        function updateStudentDropdown() {
-            const cls = reportClass.value;
-            const sec = reportSection.value;
-            const search = studentSearchInput.value.toLowerCase().trim();
-
-            let filtered = students;
-            if (cls) filtered = filtered.filter(s => s.class === cls);
-            if (sec) filtered = filtered.filter(s => s.section === sec);
-            if (search) {
-                filtered = filtered.filter(s =>
-                    (s.name || '').toLowerCase().includes(search) ||
-                    (s.id || '').toLowerCase().includes(search) ||
-                    (s.roll || '').toLowerCase().includes(search)
-                );
-            }
-
-            const curStudent = reportStudent.value;
-            reportStudent.innerHTML = `<option value="">Select Student</option>` + filtered.map(s =>
-                `<option value="${s.id}" ${s.id===curStudent?'selected':''}>${s.name} (${s.id})</option>`
-            ).join('');
-        }
-
-        // Event listeners for student search and class/section changes
-        studentSearchInput.addEventListener('input', updateStudentDropdown);
-        reportClass.addEventListener('change', updateStudentDropdown);
-        reportSection.addEventListener('change', updateStudentDropdown);
-
-        reportType.addEventListener('change', populateReportFilters);
-
-        generateReportBtn.addEventListener('click', generateReport);
-
-        function generateReport() {
-            const type = reportType.value;
-            const cls = reportClass.value;
-            const sec = reportSection.value;
-            const studentId = reportStudent.value;
-
-            let filtered = [...attendance];
-            if (type === 'student' && studentId) {
-                filtered = filtered.filter(a => a.studentId === studentId);
-            } else {
-                if (cls) filtered = filtered.filter(a => a.class === cls);
-                if (sec) filtered = filtered.filter(a => a.section === sec);
-            }
-
-            if (filtered.length === 0) {
-                reportOutput.innerHTML =
-                    `<div class="empty-state"><i class="fas fa-file-alt"></i><h3>No Data</h3><p>No records found.</p></div>`;
-                reportActions.style.display = 'none';
-                return;
-            }
-
-            const total = filtered.length;
-            const present = filtered.filter(a => a.status === 'present').length;
-            const absent = filtered.filter(a => a.status === 'absent').length;
-            const leave = filtered.filter(a => a.status === 'leave').length;
+        function generateIDCard(student) {
+            // Calculate attendance stats for this student
+            const studentAttendance = attendance.filter(a => a.studentId === student.id);
+            const present = studentAttendance.filter(a => a.status === 'present').length;
+            const absent = studentAttendance.filter(a => a.status === 'absent').length;
+            const leave = studentAttendance.filter(a => a.status === 'leave').length;
+            const total = present + absent + leave;
             const percent = total > 0 ? Math.round((present / total) * 100) : 0;
 
-            let studentName = '';
-            if (type === 'student' && studentId) {
-                const s = students.find(st => st.id === studentId);
-                studentName = s ? s.name : '';
-            }
+            let statusText = 'Needs Improvement';
+            let statusClass = 'needs-improvement';
+            if (percent >= 90) { statusText = 'Excellent';
+                statusClass = 'excellent'; } else if (percent >= 75) { statusText = 'Good';
+                statusClass = 'good'; } else if (percent >= 60) { statusText = 'Average';
+                statusClass = 'average'; }
 
-            let summaryHtml = `
-                    <div class="report-summary">
-                        <div class="stat-item"><div class="num blue">${total}</div><div class="label">Total Records</div></div>
-                        <div class="stat-item"><div class="num green">${present}</div><div class="label">Present</div></div>
-                        <div class="stat-item"><div class="num red">${absent}</div><div class="label">Absent</div></div>
-                        <div class="stat-item"><div class="num orange">${leave}</div><div class="label">Leave</div></div>
-                        <div class="stat-item"><div class="num blue">${percent}%</div><div class="label">Attendance</div></div>
+            const schoolName = schoolData.schoolName || 'School Name';
+            const schoolAddress = schoolData.schoolAddress || '';
+            const principal = schoolData.principal || 'Principal';
+            const classTeacher = schoolData.classTeacher || 'Teacher';
+            const academicYear = schoolData.academicYear || '2025-2026';
+
+            // Build the ID card HTML
+            const html = `
+                    <div class="id-card" id="idCard">
+                        <!-- Header -->
+                        <div class="card-header">
+                            <div class="school-info">
+                                <div class="emblem">A</div>
+                                <div class="school-name">
+                                    <h1>${schoolName} <span>Attendix</span></h1>
+                                    <div class="address">${schoolAddress}</div>
+                                </div>
+                            </div>
+                            <div class="card-title">
+                                <h2>STUDENT INFORMATION CARD</h2>
+                                <div class="motto">${schoolData.motto || 'Excellence in Education'}</div>
+                            </div>
+                        </div>
+
+                        <!-- Body -->
+                        <div class="card-body">
+                            <!-- Left Column -->
+                            <div class="left-col">
+                                <div class="student-name">${student.name || 'Student Name'}</div>
+                                <div>
+                                    <span class="student-id-label">Student ID</span>
+                                    <div class="student-id-number">${student.id || '—'}</div>
+                                </div>
+
+                                <div class="info-grid">
+                                    ${student.roll ? `<div class="info-item"><span class="label">Roll Number</span><div class="value"><i class="fas fa-hashtag"></i> ${student.roll}</div></div>` : ''}
+                                    ${student.class ? `<div class="info-item"><span class="label">Class</span><div class="value"><i class="fas fa-graduation-cap"></i> ${student.class} ${student.section ? '- '+student.section : ''}</div></div>` : ''}
+                                    ${student.father ? `<div class="info-item"><span class="label">Father's Name</span><div class="value"><i class="fas fa-user-tie"></i> ${student.father}</div></div>` : ''}
+                                    ${student.mother ? `<div class="info-item"><span class="label">Mother's Name</span><div class="value"><i class="fas fa-user"></i> ${student.mother}</div></div>` : ''}
+                                    ${student.dob ? `<div class="info-item"><span class="label">Date of Birth</span><div class="value"><i class="fas fa-calendar"></i> ${student.dob}</div></div>` : ''}
+                                    ${student.gender ? `<div class="info-item"><span class="label">Gender</span><div class="value"><i class="fas fa-venus-mars"></i> ${student.gender}</div></div>` : ''}
+                                    ${student.religion ? `<div class="info-item"><span class="label">Religion</span><div class="value"><i class="fas fa-pray"></i> ${student.religion}</div></div>` : ''}
+                                    ${student.blood ? `<div class="info-item"><span class="label">Blood Group</span><div class="value"><i class="fas fa-droplet"></i> ${student.blood}</div></div>` : ''}
+                                    ${student.address ? `<div class="info-item"><span class="label">Address</span><div class="value"><i class="fas fa-home"></i> ${student.address}</div></div>` : ''}
+                                    ${student.admissionDate ? `<div class="info-item"><span class="label">Date of Admission</span><div class="value"><i class="fas fa-calendar-plus"></i> ${student.admissionDate}</div></div>` : ''}
+                                </div>
+
+                                <!-- Student ID Panel with Barcode -->
+                                <div class="id-panel">
+                                    <div>
+                                        <div class="id-label">Student ID</div>
+                                        <div class="id-number">${student.id || '—'}</div>
+                                    </div>
+                                    <div class="barcode-wrap">
+                                        <svg id="barcode-${student.id}"></svg>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right Column - Attendance Summary -->
+                            <div class="right-col">
+                                <div class="att-title">Attendance Summary</div>
+
+                                <div class="att-stats">
+                                    <div class="att-stat">
+                                        <span class="icon">✅</span>
+                                        <div class="number green">${present}</div>
+                                        <div class="label">Present Days</div>
+                                    </div>
+                                    <div class="att-stat">
+                                        <span class="icon">❌</span>
+                                        <div class="number red">${absent}</div>
+                                        <div class="label">Absent Days</div>
+                                    </div>
+                                    <div class="att-stat">
+                                        <span class="icon">🏅</span>
+                                        <div class="number gold">${percent}%</div>
+                                        <div class="label">Attendance</div>
+                                    </div>
+                                </div>
+
+                                <div class="att-details">
+                                    <div class="att-detail"><span class="label">Academic Year</span><span class="value">${academicYear}</span></div>
+                                    <div class="att-detail"><span class="label">Total Working Days</span><span class="value">${total}</span></div>
+                                    <div class="att-detail"><span class="label">Attendance %</span><span class="value ${statusClass}">${percent}%</span></div>
+                                    <div class="att-detail"><span class="label">Status</span><span class="value ${statusClass}">${statusText}</span></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="card-footer">
+                            <div class="footer-note">${schoolName} • Student Record • ${academicYear}</div>
+                            <div class="signatures">
+                                <div class="sig-line">
+                                    <div class="line"></div>
+                                    <span class="label">Class Teacher</span>
+                                    <span style="font-size:0.6rem;font-weight:600;color:var(--text);">${classTeacher}</span>
+                                </div>
+                                <div class="sig-line">
+                                    <div class="line"></div>
+                                    <span class="label">Principal</span>
+                                    <span style="font-size:0.6rem;font-weight:600;color:var(--text);">${principal}</span>
+                                </div>
+                            </div>
+                            <div class="qr-wrap">
+                                <i class="fas fa-qrcode"></i>
+                            </div>
+                        </div>
                     </div>
                 `;
 
-            let title = type === 'student' ? `Individual Report: ${studentName}` :
-                `Class Report: ${cls || 'All'} ${sec ? '- Sec ' + sec : ''}`;
+            idCardContainer.innerHTML = html;
 
-            let tableHtml = `
-                    <div class="table-wrap">
-                        <table>
-                            <thead><tr>
-                                <th>Date</th>
-                                <th>Student</th>
-                                <th>Class</th>
-                                <th>Section</th>
-                                <th>Status</th>
-                            </tr></thead>
-                            <tbody>
-                    `;
-
-            filtered.sort((a, b) => a.date.localeCompare(b.date) || (a.name || '').localeCompare(b.name || ''));
-            filtered.forEach(a => {
-                const color = a.status === 'present' ? 'var(--success)' : a.status === 'absent' ?
-                    'var(--danger)' : 'var(--warning)';
-                tableHtml += `
-                        <tr>
-                            <td>${a.date || '—'}</td>
-                            <td>${a.name || a.studentId || '—'}</td>
-                            <td>${a.class || '—'}</td>
-                            <td>${a.section || '—'}</td>
-                            <td><span style="color:${color};font-weight:600;text-transform:capitalize;">${a.status || '—'}</span></td>
-                        </tr>
-                    `;
-            });
-            tableHtml += `</tbody></table></div>`;
-
-            reportOutput.innerHTML = `
-                    <h4 style="font-weight:600;margin-bottom:10px;">${title}</h4>
-                    ${summaryHtml}
-                    ${tableHtml}
-                `;
-            reportActions.style.display = 'flex';
-
-            window._reportData = { filtered, total, present, absent, leave, percent, title };
+            // Generate barcode after DOM update
+            setTimeout(() => {
+                try {
+                    const barcodeId = `barcode-${student.id}`;
+                    const svg = document.getElementById(barcodeId);
+                    if (svg && typeof JsBarcode !== 'undefined') {
+                        JsBarcode(svg, student.id || '0000', {
+                            format: 'CODE128',
+                            width: 1.2,
+                            height: 40,
+                            displayValue: true,
+                            fontSize: 12,
+                            font: 'Inter',
+                            textMargin: 2,
+                            background: '#ffffff',
+                            lineColor: '#0A1628'
+                        });
+                    }
+                } catch (e) {
+                    console.warn('Barcode error:', e);
+                }
+            }, 100);
         }
 
-        printReport.addEventListener('click', () => window.print());
+        // Close ID Card
+        closeIdcard.addEventListener('click', () => {
+            idcardModal.classList.remove('open');
+        });
+        idcardModal.addEventListener('click', (e) => {
+            if (e.target === idcardModal) idcardModal.classList.remove('open');
+        });
 
-        downloadCsv.addEventListener('click', () => {
-            const data = window._reportData;
-            if (!data) return showToast('Generate report first.', 'warning');
-            let csv = 'Date,Student,Class,Section,Status\n';
-            data.filtered.forEach(a => {
-                csv += `${a.date || ''},${a.name || a.studentId || ''},${a.class || ''},${a.section || ''},${a.status || ''}\n`;
+        // ============================================================
+        // ID CARD EXPORT FUNCTIONS
+        // ============================================================
+        window.printIDCard = function() {
+            const card = document.getElementById('idCard');
+            if (!card) return;
+            const originalTitle = document.title;
+            document.title = 'Student ID Card - Attendix';
+            window.print();
+            document.title = originalTitle;
+        };
+
+        window.downloadPDF = function() {
+            showToast('PDF download coming soon. Use Print → Save as PDF.', 'info');
+            // Fallback: open print dialog with PDF option
+            const card = document.getElementById('idCard');
+            if (card) {
+                window.print();
+            }
+        };
+
+        window.downloadImage = function() {
+            const card = document.getElementById('idCard');
+            if (!card) { showToast('No card to export.', 'error'); return; }
+            showToast('Generating image...', 'info');
+            html2canvas(card, {
+                scale: 2,
+                useCORS: true,
+                backgroundColor: '#ffffff',
+                logging: false,
+                width: card.scrollWidth,
+                height: card.scrollHeight
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `student_id_${selectedStudentForCard?.id || 'card'}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                showToast('Image downloaded!', 'success');
+            }).catch(err => {
+                console.error('Image export error:', err);
+                showToast('Error generating image. Use Print instead.', 'error');
             });
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `attendix_report_${new Date().toISOString().split('T')[0]}.csv`;
-            a.click();
-            URL.revokeObjectURL(url);
-            showToast('CSV downloaded.', 'success');
-        });
-
-        downloadJson.addEventListener('click', () => {
-            const data = window._reportData;
-            if (!data) return showToast('Generate report first.', 'warning');
-            const json = JSON.stringify(data.filtered, null, 2);
-            const blob = new Blob([json], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `attendix_report_${new Date().toISOString().split('T')[0]}.json`;
-            a.click();
-            URL.revokeObjectURL(url);
-            showToast('JSON downloaded.', 'success');
-        });
+        };
 
         // ============================================================
         // PROFILE
@@ -3346,10 +4044,7 @@
                 else if (a.status === 'absent') absent++;
             });
             const percent = total > 0 ? Math.round((present / total) * 100) : 0;
-            profTotal.textContent = total;
-            profPresent.textContent = present;
-            profAbsent.textContent = absent;
-            profPercent.textContent = percent + '%';
+            // Update profile stats if needed
         }
 
         // ============================================================
@@ -3381,8 +4076,7 @@
         });
 
         exportAllData.addEventListener('click', () => {
-            const data = { students, attendance, exportedAt: new Date().toISOString(), user: currentUser ? { email: currentUser
-                        .email, displayName: currentUser.displayName } : null };
+            const data = { students, attendance, school: schoolData, exportedAt: new Date().toISOString() };
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -3438,6 +4132,7 @@
             if (e.key === 'Escape') {
                 if (studentModal.classList.contains('open')) closeStudentModalFn();
                 if (editProfileModal.classList.contains('open')) editProfileModal.classList.remove('open');
+                if (idcardModal.classList.contains('open')) idcardModal.classList.remove('open');
                 if (confirmModal.classList.contains('open')) { confirmModal.classList.remove('open');
                     confirmCallback = null; }
             }
@@ -3451,32 +4146,24 @@
         window.editStudent = editStudent;
         window.deleteStudent = deleteStudent;
         window.markAtt = markAtt;
+        window.viewIDCard = viewIDCard;
         window.changeCalMonth = changeCalMonth;
+        window.printIDCard = printIDCard;
+        window.downloadPDF = downloadPDF;
+        window.downloadImage = downloadImage;
 
         if (!attDate.value) { attDate.value = new Date().toISOString().split('T')[0]; }
 
-        console.log('🚀 Attendix v2.0 — Firebase ready with Google Login & Fixed Index Issue');
-        console.log('✅ Student update fixed: using docId for updates');
-        console.log('✅ Individual report enhanced with class, section, and search filters');
+        console.log('🚀 Attendix Premium v3.0 — Complete School Management System');
+        console.log('✅ Features: ID Cards, Indian Holidays, Attendance, Student Management');
+        console.log('📌 First-time login prompts for school setup');
 
-        // Fallback load if auth doesn't trigger quickly
+        // Fallback load
         setTimeout(() => {
             if (!isInitialized && !currentUser) {
                 hideLoader();
             }
         }, 3000);
-    </script>
-
-    <!-- Setup instructions -->
-    <script>
-        console.log('%c🔥 FIREBASE SETUP CHECKLIST', 'font-size:16px;font-weight:bold;');
-        console.log('%c1. Enable Email/Password → Authentication → Sign-in methods', 'font-size:13px;');
-        console.log('%c2. Enable Google → Authentication → Sign-in methods', 'font-size:13px;');
-        console.log('%c3. Create Firestore Database (test mode is fine)', 'font-size:13px;');
-        console.log('%c4. Add your domain to Authorized domains (for Google login)', 'font-size:13px;');
-        console.log('%c5. No composite indexes needed - queries sort client-side ✅', 'font-size:13px;color:#22C55E;');
-        console.log('%c📌 If Google login fails, check: Authorized domains & Google provider enabled.',
-            'font-size:13px;color:#F59E0B;');
     </script>
 </body>
 </html>
